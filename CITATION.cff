@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software or the derived analysis, please cite the manuscript below."
+title: "Zero-Shot Coverage of Unseen Substance Classes for SUD Treatment-Dropout Prediction on 6.7 Million Treatment Episodes"
+authors:
+  - family-names: "Cui"
+    given-names: "Raymond"
+    affiliation: "White Station High School, Memphis, Tennessee, USA"
+version: 1.0.0
+date-released: "2025-01-01"
+license: MIT
+references:
+  - type: data
+    title: "Treatment Episode Data Set -- Discharges (TEDS-D)"
+    authors:
+      - name: "Substance Abuse and Mental Health Services Administration (SAMHSA)"
+    url: "https://www.samhsa.gov/data/data-we-collect/teds/datafiles"

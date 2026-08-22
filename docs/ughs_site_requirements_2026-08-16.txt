@@ -1,0 +1,282 @@
+IEEE BIBM 2026 UGHS
+Home
+Why
+Agenda
+Poster
+Scope
+Eligibility
+In-Person Policy
+Format
+Ethics
+Important Dates
+Venue & Hotels
+Submission
+Registration
+Program Co-Chairs
+IEEE BIBM 2026 · UGHS
+IEEE BIBM 2026 UGHS Symposium
+IEEE BIBM 2026: Undergraduate and High School Symposium
+TBD, 2026 (Full Day)
+Dallas, USA
+Home
+We are delighted to announce the 1st Undergraduate and High School Symposium ,
+to be held as part of the
+IEEE International Conference on Bioinformatics and Biomedicine (BIBM) 2026 .
+This symposium aims to provide a platform for young researchers to showcase their innovative work in the field of bioinformatics, biomedicine, and related disciplines.
+Hosted with the IEEE International Conference on Bioinformatics and Biomedicine (BIBM) 2026 .
+Why Participate in this Symposium?
+Present your research to an international audience at one of the premier bioinformatics and biomedicine conferences.
+Compete for Outstanding Paper Awards , Runner-Up Awards , and Rising Star Awards honoring exceptional student contributions.
+Interact directly with top AI and biomedical researchers, industry innovators, and funding agency representatives.
+Program Agenda
+📋 Program To Be Announced — The full program agenda, session assignments, speaker details, and paper listings will be published after the review process is complete. Please check back after the notification date.
+Day 1 — Conference Banquet
+Time Event Location
+18:00–21:00 Banquet TBD Venue
+Day 2 — Full-Day UGHS Program
+Time Event Speaker / Notes
+09:00–10:00 Keynote (50 mins) Location: TBD Ballroom Keynote Speech [Placeholder Name] (Placeholder University, USA) Placeholder Title: AI and the Future of Biomedicine
+10:00–10:30 Coffee Break Location: TBD —
+10:30–11:25 Fireside Chat (50 mins) Location: TBD Room Moderator: TBD
+11:30–12:25 Panel with Parents (50 mins) Location: TBD Room Panelists: See panelists →
+12:25–12:30 Poster Preparation —
+12:30–14:00 Poster Session (Lunch) Location: TBD All Authors
+14:00–15:30 Oral Presentations (12 mins × 7 papers × 4 rooms) UH1–4 Oral Sessions: See sessions →
+15:30–16:00 Coffee Break Location: TBD —
+16:00–17:30 Oral Presentations (12 mins × 7 papers × 4 rooms) UH5–8 Oral Sessions: See sessions →
+17:30 Closing (Award Announcements) Location: TBD Room —
+Oral Presentations · 14:00–15:30
+← Back to agenda
+UH1 — Room A UH2 — Room B UH3 — Room C UH4 — Room D
+UH1 [Chair Placeholder A]
+UH2 [Chair Placeholder B]
+UH3 [Chair Placeholder C]
+UH4 [Chair Placeholder D]
+UH1 (Room A, Session Chair: [Chair Placeholder A])
+# Time Paper ID Title Contact
+1 14:00–14:12 B001 [Placeholder Paper Title 1] [Author Placeholder]
+2 14:12–14:24 B002 [Placeholder Paper Title 2] [Author Placeholder]
+3 14:24–14:36 B003 [Placeholder Paper Title 3] [Author Placeholder]
+4 14:36–14:48 B004 [Placeholder Paper Title 4] [Author Placeholder]
+5 14:48–15:00 B005 [Placeholder Paper Title 5] [Author Placeholder]
+6 15:00–15:12 B006 [Placeholder Paper Title 6] [Author Placeholder]
+7 15:12–15:24 B007 [Placeholder Paper Title 7] [Author Placeholder]
+UH2 (Room B, Session Chair: [Chair Placeholder B])
+# Time Paper ID Title Contact
+1 14:00–14:12 B008 [Placeholder Paper Title 8] [Author Placeholder]
+2 14:12–14:24 B009 [Placeholder Paper Title 9] [Author Placeholder]
+3 14:24–14:36 B010 [Placeholder Paper Title 10] [Author Placeholder]
+4 14:36–14:48 B011 [Placeholder Paper Title 11] [Author Placeholder]
+5 14:48–15:00 B012 [Placeholder Paper Title 12] [Author Placeholder]
+6 15:00–15:12 B013 [Placeholder Paper Title 13] [Author Placeholder]
+7 15:12–15:24 B014 [Placeholder Paper Title 14] [Author Placeholder]
+UH3 (Room C, Session Chair: [Chair Placeholder C])
+# Time Paper ID Title Contact
+1 14:00–14:12 B015 [Placeholder Paper Title 15] [Author Placeholder]
+2 14:12–14:24 B016 [Placeholder Paper Title 16] [Author Placeholder]
+3 14:24–14:36 B017 [Placeholder Paper Title 17] [Author Placeholder]
+4 14:36–14:48 B018 [Placeholder Paper Title 18] [Author Placeholder]
+5 14:48–15:00 B019 [Placeholder Paper Title 19] [Author Placeholder]
+6 15:00–15:12 B020 [Placeholder Paper Title 20] [Author Placeholder]
+UH4 (Room D, Session Chair: [Chair Placeholder D])
+# Time Paper ID Title Contact
+1 14:00–14:12 B021 [Placeholder Paper Title 21] [Author Placeholder]
+2 14:12–14:24 B022 [Placeholder Paper Title 22] [Author Placeholder]
+3 14:24–14:36 B023 [Placeholder Paper Title 23] [Author Placeholder]
+4 14:36–14:48 B024 [Placeholder Paper Title 24] [Author Placeholder]
+5 14:48–15:00 B025 [Placeholder Paper Title 25] [Author Placeholder]
+6 15:00–15:12 B026 [Placeholder Paper Title 26] [Author Placeholder]
+Oral Presentations · 16:00–17:30
+← Back to agenda
+UH5 — Room A UH6 — Room B UH7 — Room C UH8 — Room D
+UH5 [Chair Placeholder E]
+UH6 [Chair Placeholder F]
+UH7 [Chair Placeholder G]
+UH8 [Chair Placeholder H]
+UH5 (Room A, Session Chair: [Chair Placeholder E])
+# Time Paper ID Title Contact
+1 16:00–16:12 B027 [Placeholder Paper Title 27] [Author Placeholder]
+2 16:12–16:24 B028 [Placeholder Paper Title 28] [Author Placeholder]
+3 16:24–16:36 B029 [Placeholder Paper Title 29] [Author Placeholder]
+4 16:36–16:48 B030 [Placeholder Paper Title 30] [Author Placeholder]
+5 16:48–17:00 B031 [Placeholder Paper Title 31] [Author Placeholder]
+6 17:00–17:12 B032 [Placeholder Paper Title 32] [Author Placeholder]
+7 17:12–17:24 B033 [Placeholder Paper Title 33] [Author Placeholder]
+UH6 (Room B, Session Chair: [Chair Placeholder F])
+# Time Paper ID Title Contact
+1 16:00–16:12 B034 [Placeholder Paper Title 34] [Author Placeholder]
+2 16:12–16:24 B035 [Placeholder Paper Title 35] [Author Placeholder]
+3 16:24–16:36 B036 [Placeholder Paper Title 36] [Author Placeholder]
+4 16:36–16:48 B037 [Placeholder Paper Title 37] [Author Placeholder]
+5 16:48–17:00 B038 [Placeholder Paper Title 38] [Author Placeholder]
+6 17:00–17:12 B039 [Placeholder Paper Title 39] [Author Placeholder]
+UH7 (Room C, Session Chair: [Chair Placeholder G])
+# Time Paper ID Title Contact
+1 16:00–16:12 B040 [Placeholder Paper Title 40] [Author Placeholder]
+2 16:12–16:24 B041 [Placeholder Paper Title 41] [Author Placeholder]
+3 16:24–16:36 B042 [Placeholder Paper Title 42] [Author Placeholder]
+4 16:36–16:48 B043 [Placeholder Paper Title 43] [Author Placeholder]
+5 16:48–17:00 B044 [Placeholder Paper Title 44] [Author Placeholder]
+6 17:00–17:12 B045 [Placeholder Paper Title 45] [Author Placeholder]
+UH8 (Room D, Session Chair: [Chair Placeholder H])
+# Time Paper ID Title Contact
+1 16:00–16:12 B046 [Placeholder Paper Title 46] [Author Placeholder]
+2 16:12–16:24 B047 [Placeholder Paper Title 47] [Author Placeholder]
+3 16:24–16:36 B048 [Placeholder Paper Title 48] [Author Placeholder]
+4 16:36–16:48 B049 [Placeholder Paper Title 49] [Author Placeholder]
+5 16:48–17:00 B050 [Placeholder Paper Title 50] [Author Placeholder]
+6 17:00–17:12 B051 [Placeholder Paper Title 51] [Author Placeholder]
+Parent Panel — Panelists
+← Back to agenda
+This panel appears on the symposium day, 11:30–12:25.
+Name Email Affiliation Title / Role
+[Parent Panelist Placeholder A] [email protected] [Placeholder University] [Professor of Bioinformatics]
+[Parent Panelist Placeholder B] [email protected] [Placeholder University] [Associate Professor]
+[Parent Panelist Placeholder C] [email protected] [Placeholder Company] [Principal Scientist]
+[Parent Panelist Placeholder D] [email protected] [Placeholder Organization] [Director of Research]
+Parent Panel — Themes & Full Questions
+← Back to panelists
+Theme: Focus of Learning Should the focus be on using AI/bioinformatics tools in daily life, understanding how they work, or learning how to code and build them?
+Theme: Age-Appropriate Onramps What are age-appropriate ways to introduce bioinformatics and biomedical AI concepts across different age groups?
+Theme: Classroom Use Should we encourage teachers to use AI/bioinformatics tools, students to use them, or both?
+Theme: Healthy Relationship with AI How can we help children develop a balanced relationship with AI—avoiding over-reliance for scientific thinking?
+Theme: Motivation & Pathways How can we nurture children's interest in biomedical science and AI? What would a progressive plan for bioinformatics education look like?
+Theme: Access & Resources How can children access bioinformatics/AI learning resources from universities, research labs, or federal agencies?
+-->
+Poster Presentation
+The recommended poster size is A0 (33.1″ × 46.8″). Posters may be prepared in portrait or landscape orientation.
+Each poster board is 8 feet wide by 4 feet high . Two posters per side means each presenter has 4 feet × 4 feet maximum (1.22 m × 1.22 m), including margins.
+Poster Board Layout (one side)
+Poster Area 4′ × 4′
+Poster Area 4′ × 4′
+← 8 feet wide | 4 feet high →
+Every student must print their own poster and bring it to the venue. We will provide boards, pushpins, and tape.
+Scope of Topics
+We invite submissions of original research from undergraduate and high school students on topics including but not limited to:
+Foundations, algorithms, models, and theory of bioinformatics and biomedical data analysis
+Machine learning, deep learning, and statistical methods for genomics, proteomics, and multi-omics data
+Mining heterogeneous biomedical data including text, spatio-temporal, graph, and imaging data
+Bioinformatics systems and platforms, federated learning, privacy, and security
+Computational drug discovery, drug-target interaction, and precision medicine
+AI for clinical decision support, electronic health records (EHR), and health informatics
+Biomedical image analysis, medical imaging, and computer-aided diagnosis
+Large language models and foundation models for biomedical applications
+Novel applications in genomics, transcriptomics, structural biology, and synthetic biology
+Eligibility
+Undergraduate and high school students pursuing an academic degree at the time of submission are eligible to submit as first authors.
+Each submission must have at least one student author, who should present if accepted.
+Co-authorship with faculty or researchers is allowed, but the student must be the primary contributor.
+In-Person Policy (UGHS)
+The UGHS Symposium is an in-person event. At least one student author must attend and present; otherwise the paper will not appear in the IEEE proceedings.
+Additional requirements for high school student authors:
+At least one parent accompanies the student to the conference.
+A signed release form ( download here ).
+An information document signed by a parent/guardian (optional high school principal signature), including paper ID, title, and parent contact. Template: Information Document (DOCX)
+Note: School approvals are optional. One adult chaperone cannot supervise multiple students.
+Where to send: Email signed documents to [email protected] before [Deadline Placeholder, 2026] .
+Submission Format Requirements
+Follow the IEEE Computer Society Proceedings Manuscript Formatting Guidelines: ieee.org/conferences/publishing/templates.html .
+Undergraduate papers: max 6 pages (figures, tables, references included).
+High school papers: max 5 pages (figures, tables, references included).
+Indicate in the author affiliation whether the first author is a high school or undergraduate student.
+Publication Ethics and Dual Submission Policy
+Originality and Dual Submission: Submitted manuscripts must be original work not submitted or published elsewhere. Dual submission is strictly prohibited.
+Subsequent Journal Submission: Extended versions submitted to journals after conference publication must clearly disclose the prior publication and include significant new contributions.
+Ethical Responsibility: Authors are responsible for ethical standards in authorship, data integrity, and citation. Violations may lead to retraction and disqualification from future submissions.
+Important Dates
+Paper Submission Deadline: August 31, 2026 · 11:59 PM AoE
+Notification of Acceptance: September 22, 2026
+Camera-Ready Paper Submission: [Placeholder Date]
+Symposium Date: TBD, 2026
+Venue & Hotels
+IEEE BIBM 2026 will be held in-person in Dallas, TX. Discounted hotel rooms are available. Please check: www3.cs.stonybrook.edu/~bibm2026/venue.html .
+How to Submit
+Open Submission Portal
+Camera-Ready Instructions
+The review process is single-blind (reviewers anonymous; authors visible).
+Accepted papers will appear in the BIBM Workshop Proceedings (IEEE Computer Society Press).
+Each accepted paper must have at least one author registered and present in person.
+Camera-Ready Submission
+Final deadline: [Placeholder Date], 2026.
+Follow all IEEE formatting and page limits. Use high-clarity figures.
+Submission site: IEEE CPS Login
+PDF eXpress validation: Conference Record [TBD].
+Use your conference submission ID (not the PDF eXpress ID) on the registration form.
+Questions? Contact [email protected] .
+Registration
+We will provide the discount registration code in the camera-ready email. The discounted fee is the one-day symposium fee , covering one student and one parent companion , including the conference banquet.
+Program Co-Chairs
+For questions, please contact the symposium co-chairs.
+Ping Wang
+Assistant Professor Stevens Institute of Technology
+pwang44@stevens.edu
+Yuzhi Guo
+Assistant Professor Kent State University
+yguo30@kent.edu
+Junzhou Huang
+Jenkins Garrett Professor The University of Texas at Arlington
+jzhuang@uta.edu
+For general inquiries: bibm2026-ughs@placeholder.edu
+-->
+Session Co-Chairs
+C
+[Session Chair Placeholder C]
+[Title] [Placeholder University]
+[email protected]
+D
+[Session Chair Placeholder D]
+[Title] [Placeholder University]
+[email protected]
+E
+[Session Chair Placeholder E]
+[Title] [Placeholder University]
+[email protected]
+F
+[Session Chair Placeholder F]
+[Title] [Placeholder University]
+[email protected]
+G
+[Session Chair Placeholder G]
+[Title] [Placeholder University]
+[email protected]
+H
+[Session Chair Placeholder H]
+[Title] [Placeholder University]
+[email protected]
+Poster Award Committee
+I
+[Award Committee Placeholder I]
+[Title] [Placeholder University]
+[email protected]
+J
+[Award Committee Placeholder J]
+[Title] [Placeholder University]
+[email protected]
+← Back to agenda
+Web Chairs
+W
+[Web Chair Placeholder]
+Graduate Research Associate [Placeholder University]
+placeholder@university.edu
+Student Volunteers
+V
+[Volunteer Placeholder A]
+Ph.D. Candidate, Computer Science [Placeholder University]
+placeholder@university.edu
+V
+[Volunteer Placeholder B]
+Student Volunteer [Placeholder University]
+Visa Information
+For visa-related questions, please contact:
+V
+[Visa Contact Placeholder A]
+Visa Information Contact
+placeholder@university.edu
+V
+[Visa Contact Placeholder B]
+Visa Information Contact
+placeholder@university.edu
+-->
+↑ Back to Top
+IEEE BIBM 2026 Undergraduate and High School Symposium · Hosted with IEEE BIBM 2026
+Source: github.com/fengjiang02/2026-bibm-hs

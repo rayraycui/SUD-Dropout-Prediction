@@ -1,0 +1,13 @@
+substance,n,dropout,auc,ci_lo,ci_hi
+Other_sedatives,63,0.571,0.8724,0.7913,0.949
+Other_amphetamines,6941,0.37,0.8472,0.8375,0.8551
+Non_rx_methadone,780,0.553,0.8337,0.8036,0.8591
+Inhalants,251,0.502,0.7892,0.73,0.8376
+OTC,4533,0.481,0.7838,0.7701,0.796
+Other_tranquilizers,519,0.154,0.7785,0.7299,0.8327
+Other_sedatives_hypnotics,407,0.42,0.778,0.7332,0.8199
+Other_hallucinogens,1043,0.44,0.7626,0.732,0.7945
+Other_stimulants,1356,0.418,0.7584,0.7336,0.7866
+Barbiturates,876,0.465,0.7527,0.7208,0.7811
+Benzodiazepines,8949,0.343,0.739,0.7283,0.7489
+PCP,2068,0.415,0.729,0.7041,0.7487

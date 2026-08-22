@@ -1,0 +1,122 @@
+variable,group,n,pct,dropout,labels
+Overall,All episodes,6717226,100.0,0.3976,n/a
+Discharge year,2015,986614,14.69,0.3829,verified
+Discharge year,2016,1015960,15.12,0.3877,verified
+Discharge year,2017,1080620,16.09,0.3827,verified
+Discharge year,2018,1034079,15.39,0.3865,verified
+Discharge year,2019,1042783,15.52,0.4064,verified
+Discharge year,2020,782004,11.64,0.4262,verified
+Discharge year,2022,775166,11.54,0.4246,verified
+Substance group,Big-6 (trainable),6501243,96.78,0.3974,verified
+Substance group,Small (held out),215983,3.22,0.4035,verified
+Primary substance,Alcohol,2491184,37.09,0.2947,verified
+Primary substance,Heroin,1560370,23.23,0.4735,verified
+Primary substance,Cannabis,840885,12.52,0.4564,verified
+Primary substance,Methamphetamine,776204,11.56,0.444,verified
+Primary substance,Other opioids,456633,6.8,0.4732,verified
+Primary substance,Cocaine,375967,5.6,0.4424,verified
+Primary substance,Benzodiazepines,76380,1.14,0.3345,verified
+Primary substance,Other amphetamines,39015,0.58,0.421,verified
+Primary substance,OTC,37578,0.56,0.5314,verified
+Primary substance,PCP,18098,0.27,0.4011,verified
+Primary substance,Non rx methadone,9867,0.15,0.4848,verified
+Primary substance,Other hallucinogens,8096,0.12,0.3985,verified
+Primary substance,Barbiturates,7695,0.11,0.4301,verified
+Primary substance,Other stimulants,7624,0.11,0.4019,verified
+Primary substance,Other tranquilizers,5187,0.08,0.1698,verified
+Primary substance,Other sedatives hypnotics,3214,0.05,0.3986,verified
+Primary substance,Inhalants,2607,0.04,0.4273,verified
+Primary substance,Other sedatives,622,0.01,0.4759,verified
+RACE,Alaska Native,16029,0.24,0.2879,verified
+RACE,American Indian,162380,2.42,0.3194,verified
+RACE,Asian/Pacific Islander,2487,0.04,0.349,verified
+RACE,Black/African American,1190339,17.72,0.4251,verified
+RACE,White,4374536,65.12,0.3904,verified
+RACE,Asian,47345,0.7,0.3852,verified
+RACE,Other single race,602916,8.98,0.4476,verified
+RACE,Two or more races,147044,2.19,0.4593,verified
+RACE,Native Hawaiian/Pacific Islander,32251,0.48,0.3943,verified
+RACE,Missing,141899,2.11,0.2215,verified
+GENDER,Male,4492019,66.87,0.3781,verified
+GENDER,Female,2222621,33.09,0.4369,verified
+GENDER,Missing,2586,0.04,0.5267,verified
+AGE,12-14,35002,0.52,0.4257,verified
+AGE,15-17,182273,2.71,0.4325,verified
+AGE,18-20,215916,3.21,0.4631,verified
+AGE,21-24,588001,8.75,0.4342,verified
+AGE,25-29,1119941,16.67,0.4273,verified
+AGE,30-34,1108153,16.5,0.4173,verified
+AGE,35-39,903291,13.45,0.4068,verified
+AGE,40-44,662231,9.86,0.3924,verified
+AGE,45-49,606764,9.03,0.3702,verified
+AGE,50-54,577785,8.6,0.3468,verified
+AGE,55-64,625069,9.31,0.3228,verified
+AGE,65+,92800,1.38,0.2904,verified
+SERVICES,code 1,241698,3.6,0.2052,raw code (no codebook)
+SERVICES,code 2,1319672,19.65,0.2325,raw code (no codebook)
+SERVICES,code 3,19035,0.28,0.2587,raw code (no codebook)
+SERVICES,code 4,833232,12.4,0.2654,raw code (no codebook)
+SERVICES,code 5,559780,8.33,0.3663,raw code (no codebook)
+SERVICES,code 6,766283,11.41,0.5028,raw code (no codebook)
+SERVICES,code 7,2907349,43.28,0.5093,raw code (no codebook)
+SERVICES,code 8,70177,1.04,0.2493,raw code (no codebook)
+PSOURCE,code 1,2882028,42.91,0.4361,raw code (no codebook)
+PSOURCE,code 2,697390,10.38,0.3695,raw code (no codebook)
+PSOURCE,code 3,449857,6.7,0.4199,raw code (no codebook)
+PSOURCE,code 4,37513,0.56,0.4568,raw code (no codebook)
+PSOURCE,code 5,31733,0.47,0.2751,raw code (no codebook)
+PSOURCE,code 6,702184,10.45,0.4136,raw code (no codebook)
+PSOURCE,code 7,1791023,26.66,0.3379,raw code (no codebook)
+PSOURCE,Missing,125498,1.87,0.3672,raw code (no codebook)
+EDUC,code 1,400057,5.96,0.429,raw code (no codebook)
+EDUC,code 2,1335945,19.89,0.4556,raw code (no codebook)
+EDUC,code 3,2999184,44.65,0.3987,raw code (no codebook)
+EDUC,code 4,1273216,18.95,0.389,raw code (no codebook)
+EDUC,code 5,415753,6.19,0.3205,raw code (no codebook)
+EDUC,Missing,293071,4.36,0.227,raw code (no codebook)
+EMPLOY,code 1,1213874,18.07,0.3481,raw code (no codebook)
+EMPLOY,code 2,456768,6.8,0.4302,raw code (no codebook)
+EMPLOY,code 3,2378215,35.4,0.4287,raw code (no codebook)
+EMPLOY,code 4,2446609,36.42,0.3947,raw code (no codebook)
+EMPLOY,Missing,221760,3.3,0.301,raw code (no codebook)
+ROUTE1,code 1,2910834,43.33,0.3179,raw code (no codebook)
+ROUTE1,code 2,1675335,24.94,0.4559,raw code (no codebook)
+ROUTE1,code 3,716335,10.66,0.4584,raw code (no codebook)
+ROUTE1,code 4,1319574,19.64,0.466,raw code (no codebook)
+ROUTE1,code 5,46624,0.69,0.4619,raw code (no codebook)
+ROUTE1,Missing,48524,0.72,0.3525,raw code (no codebook)
+FREQ1,code 1,1691681,25.18,0.3835,raw code (no codebook)
+FREQ1,code 2,1830365,27.25,0.4145,raw code (no codebook)
+FREQ1,code 3,2881725,42.9,0.3928,raw code (no codebook)
+FREQ1,Missing,313455,4.67,0.4205,raw code (no codebook)
+FRSTUSE1,code 1,378598,5.64,0.3805,raw code (no codebook)
+FRSTUSE1,code 2,1243289,18.51,0.3873,raw code (no codebook)
+FRSTUSE1,code 3,1722717,25.65,0.3779,raw code (no codebook)
+FRSTUSE1,code 4,1228593,18.29,0.3911,raw code (no codebook)
+FRSTUSE1,code 5,786395,11.71,0.4145,raw code (no codebook)
+FRSTUSE1,code 6,563599,8.39,0.4416,raw code (no codebook)
+FRSTUSE1,code 7,709496,10.56,0.4349,raw code (no codebook)
+FRSTUSE1,Missing,84539,1.26,0.3616,raw code (no codebook)
+NOPRIOR,code 0,2180295,32.46,0.4202,raw code (no codebook)
+NOPRIOR,code 1,3819850,56.87,0.4082,raw code (no codebook)
+NOPRIOR,Missing,717081,10.68,0.2727,raw code (no codebook)
+DSMCRIT,code 1,35335,0.53,0.2755,raw code (no codebook)
+DSMCRIT,code 2,110678,1.65,0.1936,raw code (no codebook)
+DSMCRIT,code 3,141447,2.11,0.0385,raw code (no codebook)
+DSMCRIT,code 4,843427,12.56,0.3358,raw code (no codebook)
+DSMCRIT,code 5,823910,12.27,0.4624,raw code (no codebook)
+DSMCRIT,code 6,140434,2.09,0.4634,raw code (no codebook)
+DSMCRIT,code 7,235098,3.5,0.4774,raw code (no codebook)
+DSMCRIT,code 8,333956,4.97,0.441,raw code (no codebook)
+DSMCRIT,code 9,174708,2.6,0.3,raw code (no codebook)
+DSMCRIT,code 10,124934,1.86,0.4031,raw code (no codebook)
+DSMCRIT,code 11,56535,0.84,0.4115,raw code (no codebook)
+DSMCRIT,code 12,43728,0.65,0.4471,raw code (no codebook)
+DSMCRIT,code 13,22087,0.33,0.4462,raw code (no codebook)
+DSMCRIT,code 14,4394,0.07,0.4208,raw code (no codebook)
+DSMCRIT,code 15,8519,0.13,0.4778,raw code (no codebook)
+DSMCRIT,code 16,2217,0.03,0.498,raw code (no codebook)
+DSMCRIT,code 17,4259,0.06,0.4813,raw code (no codebook)
+DSMCRIT,code 18,583,0.01,0.4408,raw code (no codebook)
+DSMCRIT,code 19,435022,6.48,0.4028,raw code (no codebook)
+DSMCRIT,Missing,3175955,47.28,0.4111,raw code (no codebook)

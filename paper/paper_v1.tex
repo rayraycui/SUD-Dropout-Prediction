@@ -1,0 +1,451 @@
+\documentclass[conference]{IEEEtran}
+% IEEEtran sets \rmdefault to ptm (Times), which the IEEE requires. Load real
+% Times-metric fonts explicitly so every engine (pdflatex on Overleaf, tectonic
+% locally) lays the text out identically instead of falling back to Latin Modern.
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+% newtx must come AFTER amssymb (both define \Bbbk)
+\usepackage{newtxtext,newtxmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Zero-Shot Coverage of Unseen Substance\\
+Classes for SUD Treatment-Dropout\\
+Prediction on 6.7 Million Treatment Episodes}
+
+% UGHS requirement: the affiliation must indicate whether the FIRST author is a high
+% school or an undergraduate student. Per author decision the explicit designation line
+% was removed; the school name in the affiliation carries it implicitly. The 5-page
+% high-school limit still governs this manuscript.
+% ACTION FOR AUTHORS: replace the email placeholder below before submission.
+\author{\IEEEauthorblockN{Raymond Cui}
+\IEEEauthorblockA{\textit{White Station High School}, Memphis, Tennessee, USA\\
+\texttt{<author email>}}}
+
+\maketitle
+
+\begin{abstract}
+Predicting substance-use-disorder (SUD) treatment dropout is well studied, yet models are
+typically trained one substance at a time, leaving small or emerging classes uncovered. We ask
+whether a single model trained only on the six highest-volume substances can predict usefully for
+classes it has never seen: zero-shot in the sense that no training episode belongs to the
+target class. Using 6.72 million episodes from the U.S. Treatment Episode Data Set (TEDS-D,
+2015--2022), we train a pooled gradient-boosted tree on 15 intake-time features and evaluate it
+on twelve held-out small classes. It achieves mean AUROC 0.777 (range 0.745--0.806) on unseen
+classes, nearly matching performance on trained substances, while pooling yields no accuracy gain
+over substance-specific training. On those unseen classes it stays calibrated (mean decile gap
+0.015) and clinically useful (positive net benefit to threshold 0.80), loses more than the trained
+substances across the COVID-19 discontinuity (0.051 versus 0.017), and audits clean by subgroup
+except at age 65+, where predicted risk exceeds observed by 0.140. TabPFN-3 is more
+sample-efficient at matched budgets, yet at each model's maximum training size both converge to a
+shared $\sim$0.78 AUROC ceiling, locating the limit in the intake features rather than the
+learner. One deployable model therefore covers the substance long tail without per-class
+retraining.
+\end{abstract}
+
+\begin{IEEEkeywords}
+substance use disorder, treatment retention, machine learning, gradient boosting,
+zero-shot generalization, tabular foundation models, TabPFN, health informatics
+\end{IEEEkeywords}
+
+\section{Introduction}
+Retaining patients in substance-use-disorder (SUD) treatment is one of the strongest modifiable
+predictors of recovery, and dropout is common: in the national data used here, 39.8\% of resolved
+episodes end in the patient leaving against professional advice. If the episodes at highest risk of dropout
+could be flagged at intake, programs could target limited follow-up and retention resources more
+efficiently, an application in which machine learning has shown broad promise across psychiatry
+\cite{chekroud_ml_psych}.
+
+Machine-learning models that predict SUD treatment completion or dropout from administrative
+intake data are well established, including on TEDS-D
+\cite{ml_teds_disparities,ml_jamia,attrition2025,sud_ml_review}, but essentially all of this
+work trains and evaluates \emph{one substance at a time} or on a single mixed cohort, and never
+asks whether a model generalizes to a substance class absent from training. National treatment
+systems see a heavy-tailed substance distribution: a handful of high-volume substances dominate,
+while dozens of smaller classes (and periodically new ones such as novel synthetic opioids)
+individually have far too few episodes to train a reliable substance-specific model, so a
+per-substance paradigm leaves them uncovered.
+
+We therefore invert the usual question, asking not ``how accurately can we predict dropout for
+substance $X$?'' but \textbf{can one model, trained only on the data-rich substances, produce
+useful dropout predictions for the substance classes it has never seen?}
+
+Our contributions are:
+\begin{enumerate}
+\item \textbf{Single-model coverage of unseen substance classes (primary).} A pooled model
+trained on six substances predicts dropout for twelve held-out small classes at mean AUROC 0.777
+with no substance-specific training, and we test calibration, clinical utility, temporal
+robustness and subgroup fairness \emph{on those unseen classes}.
+\item \textbf{Evidence that coverage, not accuracy, is the reason to pool.} Pooled training does
+not improve on substance-specific training, so the pooled model earns its place by covering
+classes a per-substance approach cannot reach rather than by scoring higher on the ones it can.
+\item \textbf{A two-protocol tabular-foundation-model benchmark.} We benchmark TabPFN-3
+\cite{tabpfn_nature} against gradient boosting at matched training size and at each model's
+maximum training size, separating sample efficiency from attainable accuracy and exposing a
+task-imposed ceiling.
+\end{enumerate}
+
+\section{Related Work}
+\textbf{Dropout prediction on SUD administrative data.} On TEDS, Baird et al.\
+\cite{ml_teds_disparities} used a virtual-twins random forest to study disparities in
+completion, Rabinowitz et al.\ \cite{attrition2025} predicted attrition in one cohort
+($N \approx 30$k) at AUROC 0.63--0.67, and Nasir et al.\ \cite{ml_jamia} reported
+AUROC $\approx$0.89 for completion by joining discharge records with county-crime data. A
+systematic review \cite{sud_ml_review} flags the shared gap: validation within a single substance or cohort, with out-of-distribution
+generalization rarely tested.
+
+\textbf{Transfer across substances and tabular foundation models.} The closest precedent is
+Bailey and DeFulio \cite{bailey2022}, who transferred a convolutional network's weights from
+a heroin dataset to a smaller opioid dataset, one source$\rightarrow$target pair between two
+opioids, framed as a transfer method for an accuracy gain. Our design differs in scope and
+conclusion: twelve held-out classes spanning sedatives, stimulants and hallucinogens, evaluated
+with no weight adaptation, and the \emph{opposite} headline, that pooling does not raise
+accuracy, so the value is coverage. Separately, TabPFN \cite{tabpfn_nature} is a transformer pretrained to
+perform Bayesian inference over tabular datasets in one forward pass, strong in the low-data
+regime; it has been applied to clinical prediction but, to our knowledge, not to SUD treatment
+outcomes and not benchmarked against gradient boosting on a national administrative dataset.
+
+\section{Data and Methods}
+
+\subsection{Dataset}
+We use the SAMHSA Treatment Episode Data Set, Discharges (TEDS-D), a public, de-identified,
+national census of discharges from publicly funded SUD treatment facilities, pooling seven annual
+files (2015--2020, 2022). The 2021 file was excluded because it ships text-labeled categories rather
+than the numeric codes used in every other year, and a hand-built crosswalk would carry
+miscoding risk; the retained years span pre-COVID, COVID-onset and post-COVID periods. After restricting to episodes with a resolvable outcome and a mappable primary
+substance, the analytic sample is \textbf{6{,}717{,}226 episodes} with an overall dropout rate of
+0.398.
+
+\subsection{Task definition}
+The prediction target is binary: \emph{dropout} (discharge reason ``left against professional
+advice'') versus \emph{treatment completed}. Episodes with other discharge reasons (transfer,
+incarceration, death, facility termination) are excluded, leaving a clean contrast.
+
+Predictions use the \textbf{15 intake-time features} in Table~\ref{tab:features}, all recorded at
+admission. The primary substance (SUB1) is only the grouping variable defining the coverage split
+and is \textbf{never a feature}. To prevent leakage we exclude the discharge reason, all discharge (``\_D'')
+fields, length of stay and the 18 substance flags that re-encode SUB1. In a single-year sensitivity check (2020 held out), expanding the panel to 27 pre-admission
+features improved pooled AUROC by only $+0.005$ (0.820 to 0.825), within confidence-interval
+width, so the 15-feature set was retained.
+
+\begin{table}[t]
+\caption{The 15 intake-time predictors. All are recorded at admission, so a prediction is
+available before treatment begins. SUB1 (primary substance) serves only as the grouping
+variable defining training strategies and is never a model input.}
+\label{tab:features}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}llp{0.46\columnwidth}@{}}
+\toprule
+TEDS field & Domain & Definition \\
+\midrule
+SUB2, SUB3 & Substance & Secondary and tertiary substances at admission \\
+ROUTE1 & Substance & Route of administration (oral, smoking, inhalation, injection) \\
+FREQ1 & Substance & Frequency of use of the primary substance \\
+FRSTUSE1 & Substance & Age at first use of the primary substance \\
+SERVICES & Treatment & Service setting (detox, residential, ambulatory) \\
+DSMCRIT & Clinical & DSM diagnostic category \\
+NOPRIOR & Treatment & Number of prior treatment episodes \\
+PSOURCE & Referral & Referral source (self, provider, criminal justice) \\
+AGE, GENDER & Demographic & Age band (12--14 to 65+) and reported sex \\
+RACE & Demographic & Reported race/ethnicity \\
+EDUC, EMPLOY & Demographic & Education completed and employment status \\
+STFIPS & Geography & Reporting state (FIPS code) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\caption{Cohort characteristics of the analytic sample ($N=6{,}717{,}226$ discharge
+episodes, 2015--2022, 2021 excluded). \%~is the column percentage of the full cohort and
+\emph{Drop.} the within-group dropout rate; the cohort-wide rate is 0.398. The six
+highest-volume substances (alcohol through cocaine) form the big-6 training pool and the
+remaining twelve are the held-out coverage targets. Race is missing for 2.1\% of episodes
+and sex for 0.04\%; age band is complete.}
+\label{tab:cohort}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}lrrr@{\hspace{9pt}}lrrr@{\hspace{9pt}}lrrr@{}}
+\toprule
+Group & $n$ & \% & Drop. & Group & $n$ & \% & Drop. & Group & $n$ & \% & Drop. \\
+\midrule
+\multicolumn{4}{@{}l@{}}{\textit{Primary substance}} & \multicolumn{4}{@{}l@{}}{\textit{Age band at admission}} & \multicolumn{4}{@{}l@{}}{\textit{Race/ethnicity}} \\
+Alcohol & 2,491,184 & 37.1 & 0.295 & 12-14 & 35,002 & 0.5 & 0.426 & Alaska Native & 16,029 & 0.2 & 0.288 \\
+Heroin & 1,560,370 & 23.2 & 0.474 & 15-17 & 182,273 & 2.7 & 0.432 & American Indian & 162,380 & 2.4 & 0.319 \\
+Cannabis & 840,885 & 12.5 & 0.456 & 18-20 & 215,916 & 3.2 & 0.463 & Asian/Pacific Islander & 2,487 & 0.0 & 0.349 \\
+Methamphetamine & 776,204 & 11.6 & 0.444 & 21-24 & 588,001 & 8.8 & 0.434 & Black/African American & 1,190,339 & 17.7 & 0.425 \\
+Other opioids & 456,633 & 6.8 & 0.473 & 25-29 & 1,119,941 & 16.7 & 0.427 & White & 4,374,536 & 65.1 & 0.390 \\
+Cocaine & 375,967 & 5.6 & 0.442 & 30-34 & 1,108,153 & 16.5 & 0.417 & Asian & 47,345 & 0.7 & 0.385 \\
+Benzodiazepines & 76,380 & 1.1 & 0.334 & 35-39 & 903,291 & 13.4 & 0.407 & Other single race & 602,916 & 9.0 & 0.448 \\
+Other amphetamines & 39,015 & 0.6 & 0.421 & 40-44 & 662,231 & 9.9 & 0.392 & Two or more races & 147,044 & 2.2 & 0.459 \\
+OTC & 37,578 & 0.6 & 0.531 & 45-49 & 606,764 & 9.0 & 0.370 & Native Hawaiian/Pacific Islander & 32,251 & 0.5 & 0.394 \\
+PCP & 18,098 & 0.3 & 0.401 & 50-54 & 577,785 & 8.6 & 0.347 & Missing & 141,899 & 2.1 & 0.221 \\
+Non rx methadone & 9,867 & 0.1 & 0.485 & 55-64 & 625,069 & 9.3 & 0.323 & \multicolumn{4}{@{}l@{}}{\textit{Discharge year}} \\
+Other hallucinogens & 8,096 & 0.1 & 0.398 & 65+ & 92,800 & 1.4 & 0.290 & 2015 & 986,614 & 14.7 & 0.383 \\
+Barbiturates & 7,695 & 0.1 & 0.430 & \multicolumn{4}{@{}l@{}}{\textit{Sex}} & 2016 & 1,015,960 & 15.1 & 0.388 \\
+Other stimulants & 7,624 & 0.1 & 0.402 & Male & 4,492,019 & 66.9 & 0.378 & 2017 & 1,080,620 & 16.1 & 0.383 \\
+Other tranquilizers & 5,187 & 0.1 & 0.170 & Female & 2,222,621 & 33.1 & 0.437 & 2018 & 1,034,079 & 15.4 & 0.386 \\
+Other sedatives hypnotics & 3,214 & 0.0 & 0.399 & \multicolumn{4}{@{}l@{}}{\textit{Substance group}} & 2019 & 1,042,783 & 15.5 & 0.406 \\
+Inhalants & 2,607 & 0.0 & 0.427 & Big-6 (trainable) & 6,501,243 & 96.8 & 0.397 & 2020 & 782,004 & 11.6 & 0.426 \\
+Other sedatives & 622 & 0.0 & 0.476 & Small (held out) & 215,983 & 3.2 & 0.404 & 2022 & 775,166 & 11.5 & 0.425 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Cohort and substance split}
+Table~\ref{tab:cohort} summarizes the cohort across all eighteen primary-substance classes and
+the demographic strata. The six ``big-6'' substances have enough episodes to train a
+substance-specific model; the remaining twelve ``small'' classes are the coverage targets and
+together are only 3.2\% of episodes. The smallest big-6 substance (cocaine, 376k) is
+4.9$\times$ larger than the largest small class (benzodiazepines, 76k). Base rates vary far more
+across substances (0.170 to 0.531) than the cohort-wide 0.398 suggests, so one model must span
+markedly different populations.
+
+
+\subsection{Models and evaluation}
+The primary model is a histogram-based gradient-boosted-tree classifier (GBT)
+\cite{friedman_gbm,xgboost}, \texttt{HistGradientBoostingClassifier} from scikit-learn
+\cite{sklearn}; the linear baseline is \texttt{LogisticRegression} after a
+\texttt{ColumnTransformer} one-hot encoding the 15 features. Hyperparameters are given in
+the released code. Histogram binning \cite{lightgbm} keeps refitting across six substances, two
+strategies and hundreds of bootstrap resamples affordable on CPU, and handles missing values
+natively. \texttt{XGBClassifier} \cite{xgboost} at matched settings on the two largest
+substances agrees to within 0.002 AUROC, so no conclusion depends on the boosting library.
+
+All 15 TEDS fields are integer-coded categoricals. GBT receives these codes directly, since binning is
+invariant to nominal-code ordering, whereas logistic regression needs the one-hot expansion. No scaling, imputation, or class rebalancing is applied.
+We compare two training strategies that differ only in which episodes enter training:
+\emph{substance-specific}, fitted and tested within a single substance, and \emph{pooled},
+fitted once on all six high-volume substances and applied everywhere.
+
+\textbf{Training assembly.} Every cross-sectional result comes from one fitted model. The
+6{,}501{,}243 big-6 episodes are split 70/30 stratified jointly on primary substance and outcome,
+giving 4{,}550{,}870 training and 1{,}950{,}373 held-out episodes, and the training side is then
+reduced to 999{,}999 by subsampling on the same joint key. A single GBT is fitted on that
+cohort and scored, without refitting, both on the big-6 holdout and on all 215{,}983 unseen-class
+episodes. The temporal arms are year-restricted refits of the identical specification, training
+filtered to 2015--2018 for the COVID arm and to years before 2022 for the temporal-coverage arm.
+No unseen-class episode enters any training set, which is what makes the twelve held-out classes
+out-of-sample by construction.
+
+We use \emph{zero-shot} in the literal sense that the model sees zero training episodes of
+the target substance class; the target (dropout versus completion) is unchanged, so the shift
+at test time is in the covariate distribution rather than the label space. Because substance
+is never a model input, the fitted model applies to a held-out class unmodified. All AUROCs carry bootstrap 95\% confidence intervals, and beyond discrimination we assess
+calibration \cite{van_calster_calib} and clinical utility via decision-curve analysis
+\cite{dca_vickers}. GBT and logistic experiments ran on one 48-core CPU machine; TabPFN-3
+additionally used one NVIDIA RTX 2000 Ada GPU.
+
+
+We also benchmark \textbf{TabPFN-3}, a pretrained tabular foundation model, under two
+protocols. It predicts by in-context learning rather than parameter fitting, so cost scales with
+(train~$\times$~test) size and the usable context is bounded by compute rather than data
+availability: $\sim$10{,}000 rows on CPU versus 100{,}000 rows in 38.9~s on one GPU, a $60\times$ speedup at
+matched size. Under \emph{matched training size} both
+models receive the same 10{,}000 training and 2{,}000 test rows, isolating sample efficiency;
+under \emph{maximum training size} each receives as much as it can use (100{,}000 rows for
+TabPFN-3, up to $10^6$ for GBT), which asks which model to deploy. Both protocols score
+identical test rows per comparison, so differences are paired, with 95\% bootstrap intervals
+from 300 resamples.
+
+\section{Results}
+
+\subsection{Single-model coverage of unseen substances (primary result)}
+Figure~\ref{fig:coverage} shows the headline result. The pooled model, trained only on the six
+big-6 substances, predicts dropout for each of the twelve held-out small classes at a mean AUROC
+of \textbf{0.777} (unweighted; range 0.745--0.806), so every small class is predictable despite
+contributing nothing to training. Performance is not uniform: six classes sit above the big-6 internal reference (0.777) and six
+below, the lowest being benzodiazepines (0.745), barbiturates (0.748) and OTC (0.751). No
+class collapses toward chance. A temporal version of the
+test (train on years $<$2022, evaluate on 2022 small-class episodes) gives a similar mean AUROC of
+0.785, so coverage is not an artifact of same-period evaluation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig1_coverage.png}
+\caption{\textbf{Coverage.} A pooled model trained only on the six big-6 substances predicts
+dropout for twelve held-out small classes it never saw (mean AUROC 0.777; dashed line = big-6
+internal reference). Bars are bootstrap 95\% CIs.}
+\label{fig:coverage}
+\end{figure}
+
+\subsection{Pooling costs no accuracy}
+For GBT, mean AUROC across the six highest-volume substances is 0.785 with a model trained on
+the target substance alone and 0.776 with the pooled model, a difference of $-0.008$. The penalty is
+small and consistent rather than concentrated in one substance: pooled training loses between
+0.004 (Alcohol) and 0.012 (Other opioids) AUROC. As a supplementary analysis, rebuilding the pooled
+cohort with an equal number of episodes per substance rather than matching the population mixture
+moves per-substance AUROC by at most 0.004 (mean $+0.001$; it helps the four smaller substances
+and costs the two largest), so the alcohol-heavy mixture is not the source of the pooling cost.
+Pooling therefore does \emph{not} beat
+substance-specific training, and the pooled model's value is coverage and single-model
+deployment simplicity rather than an accuracy gain. Logistic regression reproduces the same
+ordering at a uniformly lower level (0.753 and 0.742), trailing GBT by 0.031 to 0.034 AUROC,
+which indicates nonlinear feature interactions matter.
+
+\subsection{Calibration and clinical utility on unseen classes}
+A risk score is actionable only if its probabilities mean what they say and if acting on them
+beats the default policy. On the big-6 holdout, our reference, the pooled GBT reaches AUROC 0.791
+and Brier 0.179.
+
+Scoring the same model on all 215{,}983 unseen-class episodes gives AUROC 0.778 and Brier 0.186,
+and calibration transfers essentially intact (Fig.~\ref{fig:calib}a): across risk
+deciles the mean absolute gap between predicted and observed dropout is 0.015 and never exceeds
+0.046, despite the unseen cohort's higher base rate (0.404 versus 0.397) and different substance
+mix. The model is therefore usable as a probability, not merely a ranking, on classes it never saw. Decision-curve analysis (Fig.~\ref{fig:calib}b)
+shows net benefit above both defaults through threshold 0.80: 0.275 at 0.20 and 0.126 at 0.50,
+where ``treat all'' has already turned negative (crossing zero at 0.41). The margin over ``treat all'' widens above 0.15, the
+regime that matters for a program supporting part of its caseload.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig3b_calib_dca_unseen.png}
+\caption{\textbf{Calibration and clinical utility on the twelve unseen classes}
+($n=215{,}983$; pooled GBT trained only on the big-6). (a) Predicted versus observed dropout by
+risk decile: the ten points are deciles of predicted risk pooled across all twelve classes
+(about 21,600 episodes each), not individual substances, and the dashed diagonal is the
+identity line on which predicted equals observed. Mean absolute deviation 0.015.
+(b) Decision curve: net benefit stays above both
+defaults through threshold 0.80, while ``treat all'' turns negative at 0.41.}
+\label{fig:calib}
+\end{figure}
+
+\subsection{COVID-aware temporal transportability}
+A model deployed on emerging substances also runs in a later era than the one it trained in, so
+temporal and substance shift compound. The dropout base rate rises from $\sim$0.39 pre-2020 to
+0.427 at COVID onset and stays elevated (0.426 in 2022), making the pandemic a natural shift test.
+Training on 2015--2018 only, we hold 2019 out and evaluate on 2019, 2020 and 2022
+(Fig.~\ref{fig:covid}).
+
+On the trained substances the model is close to era-invariant: AUROC 0.786, 0.769, and 0.768:
+a one-time step of 0.017 at the pandemic boundary and no further erosion. Repeating the design
+end-to-end within the unseen classes (training on 125{,}912 unseen-class episodes from 2015--2018,
+testing on 35{,}424 / 26{,}861 / 27{,}786) gives 0.789, 0.738, and 0.708: a 0.051 step at onset
+and a further 0.030 by 2022, against 0.017 and 0.001. Combined substance and temporal shift
+therefore costs about 0.081 AUROC over seven years, whereas either alone costs under 0.020.
+Coverage survives the pandemic break but decays with time in a way same-period evaluation would
+not reveal, arguing for periodic recalibration rather than indefinite deployment.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig4b_covid_unseen.png}
+\caption{\textbf{Temporal transportability across the COVID discontinuity.} Both models are
+trained on 2015--2018 only, 2019 held out cleanly. (a) Test-year AUROC; error bars are
+bootstrap 95\% CIs (big-6 only, where per-year test sets exceed 700k episodes). (b) AUROC lost
+between consecutive eras: the unseen classes lose more at onset (0.051 versus 0.017) and keep
+decaying afterwards (0.030 versus 0.001).}
+\label{fig:covid}
+\end{figure}
+
+\subsection{Subgroup fairness}
+Because algorithmic risk scores can encode and amplify demographic bias
+\cite{obermeyer_bias}, we audit the model across subgroups. On the trained substances the audit is
+clean: calibration gaps stay within $\pm$0.022 everywhere and age shows a monotonic gradient
+(0.728 at ages 12--14 to 0.837 at 65+).
+
+The audit that matters for our claim is on the unseen classes, across 22 race, sex and age strata
+(Fig.~\ref{fig:fairness}). AUROC spans 0.677--0.798 (standard deviation 0.032), sex
+is near-equal (male 0.775, female 0.780), age climbs from 0.707 at 12--14 to 0.795 at 55--64, and
+the lowest values fall on the smallest strata (Alaska Native, $n{=}260$).
+
+Calibration on unseen classes is where the audit finds a real exception. Twenty-one of 22 strata
+stay within 0.045 of their observed rate, but the 65+ band predicts risk above observed by
+\textbf{0.140} ($n{=}5{,}061$, observed dropout 0.165 against
+a cohort rate of 0.404), so a threshold-based referral rule would over-flag this band. The gap is
+localised rather than an age effect: a single state's other-tranquilizer episodes at 65+
+($n{=}3{,}234$, 1.5\% of the cohort) report observed dropout 0.067 against 0.277 for big-6 patients
+of the same age in the same state, a pattern absent from the training data; excluding them the 65+
+band instead under-predicts slightly, by 0.010, and no stratum exceeds 0.05. Across the eight strata with $n>20{,}000$, calibration error never exceeds 0.017 and AUROC stays
+in 0.772--0.798, so the model is fair in discrimination and adequately calibrated for the bulk of
+the population.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig5b_fairness_unseen.png}
+\caption{\textbf{Subgroup audit on the twelve unseen classes} (22 strata; dashed line:
+unseen-cohort AUROC 0.778). (a) AUROC by age band, race/ethnicity, and sex; the lowest values fall
+on the smallest strata. (b) Absolute calibration gap per stratum: only the 65+ band (highlighted)
+exceeds 0.05, at 0.140, while 21 of 22 stay within 0.045.}
+\label{fig:fairness}
+\end{figure}
+
+\subsection{Tabular foundation model benchmark}
+The two protocols give different answers, and the contrast is the result. At a matched
+10{,}000/2{,}000-row train/test budget, TabPFN-3 beats GBT in \emph{every} one of the 18
+substance-by-strategy comparisons by a mean of $+0.018$ AUROC. Given each model the data it can use,
+that advantage disappears: TabPFN-3 at a 100{,}000-row context versus GBT at up to $10^6$ rows
+wins only 8 of 18 comparisons, mean $-0.0001$ AUROC, with 15 of 18 paired bootstrap intervals
+including zero, per-strategy means flat, and the three significant intervals pointing both ways.
+
+TabPFN-3's advantage is therefore \emph{sample efficiency}, not higher attainable accuracy.
+Both architectures converge near 0.78 AUROC, locating the limit in the intake-time
+administrative variables rather than the learner, consistent with pooling also moving accuracy
+very little.
+
+\section{Discussion}
+The central finding is that a single model covers substance classes it never trained on, which is
+useful precisely where per-substance modeling fails: the long tail of substances too small
+to support their own model. The dominant predictors (treatment setting, diagnosis
+group, prior-treatment history) appear substance-general enough to serve all six,
+supported by the flat pooled-versus-specific comparison and the coverage result.
+
+\textbf{Limitations and future work.} The unit is a treatment episode, not a person, and the
+outcome is an administrative discharge code, not a clinical assessment of recovery; 2021 is
+excluded. The legitimate use is population-level (ranking a caseload to target finite retention resources),
+while person-level deployment would require prospective, linked, IRB/DUA-governed validation.
+Coverage here is zero-shot generalization, the weakest form of transfer; since pooling does not
+beat substance-specific training we do not expect stronger adaptation to help, though a
+confirmatory control (importance-weighted boosting \cite{importance_weight} or TabPFN few-shot
+adaptation) is future work. Two findings bound the deployment claim. The 65+
+calibration gap on unseen classes (0.140) is the one audit failure, and it traces to one
+state-substance reporting cell rather than to age, so the indicated check is per-state label
+screening, not recalibration;
+temporal decay on unseen classes is larger than on trained substances and does not plateau, so the
+result licenses periodic refitting rather than indefinite use of a frozen model.
+
+\section{Conclusion}
+On 6.72M national treatment episodes, a single pooled model predicts dropout for twelve
+substance classes it never saw at mean AUROC 0.777. Testing deployment assurances \emph{on those
+unseen classes} rather than on the training substances, three of four hold: calibration transfers
+(mean decile gap 0.015), net benefit stays positive to threshold 0.80, and discrimination is
+stable across strata (0.677--0.798); temporal robustness is qualified, since the COVID boundary
+costs 0.051 AUROC on unseen classes against 0.017 on trained ones. Subject to periodic
+recalibration and an age-specific check, one model can cover the substance long tail, including
+substances that emerge after training. TabPFN-3 is the more sample-efficient learner, reaching
+the same accuracy band from a tenth of the episodes, but at each model's maximum training size the
+two are indistinguishable, locating the limit in the intake data, not the learner.
+
+\section*{Reproducibility and Data Availability}
+TEDS-D files are public from SAMHSA; all models use scikit-learn implementations and the public
+TabPFN-3 checkpoint. The code repository contains the analysis scripts, hyperparameters, a data
+dictionary and one CSV of results per experiment, including every value plotted here.
+
+\begin{thebibliography}{00}
+\bibitem{chekroud_ml_psych} A. M. Chekroud \textit{et al.}, ``The promise of machine learning in predicting treatment outcomes in psychiatry,'' \textit{World Psychiatry}, vol.~20, pp.~154--170, 2021.
+\bibitem{ml_teds_disparities} A. Baird, Y. Cheng, and Y. Xia, ``Use of machine learning to examine disparities in completion of substance use disorder treatment,'' \textit{PLoS ONE}, vol.~17, p.~e0275054, 2022.
+\bibitem{ml_jamia} M. Nasir \textit{et al.}, ``Machine learning-based outcome prediction and novel hypotheses generation for substance use disorder treatment,'' \textit{J.\ Amer.\ Med.\ Inform.\ Assoc.}, vol.~28, pp.~1216--1224, 2021.
+\bibitem{attrition2025} J. A. Rabinowitz \textit{et al.}, ``Predictors of treatment attrition among individuals in substance use disorder treatment: A machine learning approach,'' \textit{Addict.\ Behav.}, vol.~163, p.~108265, 2025.
+\bibitem{sud_ml_review} B. P. de Mattos \textit{et al.}, ``Craving for a robust methodology: A systematic review of machine learning algorithms on substance-use disorders treatment outcomes,'' \textit{Int.\ J.\ Ment.\ Health Addict.}, vol.~24, no.~2, pp.~1090--1117, 2026, doi: 10.1007/s11469-024-01403-z.
+\bibitem{tabpfn_nature} N. Hollmann \textit{et al.}, ``Accurate predictions on small data with a tabular foundation model,'' \textit{Nature}, vol.~637, pp.~319--326, 2025.
+\bibitem{bailey2022} J. D. Bailey and A. DeFulio, ``Predicting substance use treatment failure with transfer learning,'' \textit{Subst.\ Use Misuse}, vol.~57, pp.~1982--1987, 2022.
+\bibitem{friedman_gbm} J. H. Friedman, ``Greedy function approximation: A gradient boosting machine,'' \textit{Ann.\ Statist.}, vol.~29, pp.~1189--1232, 2001.
+\bibitem{xgboost} T. Chen and C. Guestrin, ``XGBoost: A scalable tree boosting system,'' in \textit{Proc.\ ACM SIGKDD}, 2016, pp.~785--794.
+\bibitem{sklearn} F. Pedregosa \textit{et al.}, ``Scikit-learn: Machine learning in Python,'' \textit{J.\ Mach.\ Learn.\ Res.}, vol.~12, pp.~2825--2830, 2011.
+\bibitem{lightgbm} G. Ke \textit{et al.}, ``LightGBM: A highly efficient gradient boosting decision tree,'' in \textit{Adv.\ Neural Inf.\ Process.\ Syst.\ (NIPS)}, 2017, pp.~3146--3154.
+\bibitem{van_calster_calib} B. Van Calster \textit{et al.}, ``Calibration: The Achilles heel of predictive analytics,'' \textit{BMC Med.}, vol.~17, p.~230, 2019.
+\bibitem{dca_vickers} A. J. Vickers and E. B. Elkin, ``Decision curve analysis: A novel method for evaluating prediction models,'' \textit{Med.\ Decis.\ Making}, vol.~26, pp.~565--574, 2006.
+\bibitem{obermeyer_bias} Z. Obermeyer \textit{et al.}, ``Dissecting racial bias in an algorithm used to manage the health of populations,'' \textit{Science}, vol.~366, pp.~447--453, 2019.
+\bibitem{importance_weight} N. Lu \textit{et al.}, ``Rethinking importance weighting for transfer learning,'' arXiv:2112.10157, 2021.
+\end{thebibliography}
+\end{document}
+

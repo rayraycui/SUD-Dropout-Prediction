@@ -1,0 +1,12 @@
+# raw data (large, public — download via src/00)
+data/raw/
+*.zip
+# large model checkpoint (download separately)
+data/tabpfn_v3_default.ckpt
+# python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+# OS
+.DS_Store
