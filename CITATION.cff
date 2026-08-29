@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software or the derived analysis, please cite the manuscript below."
-title: "Zero-Shot Coverage of Unseen Substance Classes for SUD Treatment-Dropout Prediction on 6.7 Million Treatment Episodes"
+title: "One Pooled Model or Seventeen Substance-Specific Models? Predicting SUD Treatment Dropout on 6.7 Million Episodes"
 authors:
   - family-names: "Cui"
     given-names: "Raymond"

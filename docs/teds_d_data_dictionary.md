@@ -2,6 +2,9 @@
 ## File: teds_d_analysis_2015_2022.parquet
 
 **Source:** SAMHSA Treatment Episode Data Set, Discharges (TEDS-D), public-use files.
+Per-year source-file identity (URL, SHA-256, byte size, row count) is pinned in
+`data/raw/MANIFEST.csv`; the seven raw files total 10,713,968 data rows before
+outcome and substance filtering.
 **Years:** 2015, 2016, 2017, 2018, 2019, 2020, 2022 (7 years).
 **NOTE: 2021 EXCLUDED:** the 2021 public-use CSV ships every field as TEXT labels
 (e.g. REASON="Dropped out of treatment", SUB1="Marijuana/hashish") rather than the
@@ -11,8 +14,8 @@ numeric codes used in all other years. Rather than hand-build a text→code cros
 is intact (post-COVID test = 2022).
 
 **Analytic sample:** episodes with REASON in {1,2} and a mappable primary substance.
-- Rows: 6,717,226
-- Overall dropout rate: 0.398
+- Rows: 6,679,648 (17 substances; SUB1 code 19, other drugs, excluded)
+- Overall dropout rate: 0.397
 
 ## Columns
 | Column | Role | Definition |
@@ -42,9 +45,8 @@ and is NOT used.
   CASEID/DISYR (identifiers), SUB1 (grouping var), and the 18 substance FLG flags
   (ALCFLG…OTHERFLG, they re-encode SUB1/2/3 and would leak the coverage grouping).
 
-## Big-6 / small split (locked on the full 7-year pool)
-Smallest big-6 (Cocaine, 375,967) is 4.9× the largest small class (Benzodiazepines,
-76,380). See teds_d_class_sizes_2015_2022.csv for all 18 classes.
+## High-volume / lower-volume split (locked on the full 7-year pool)
+The lowest-volume of the six high-volume substances (Cocaine, 375,967) is 4.9× the highest-volume of the eleven lower-volume substances (Benzodiazepines, 76,380). See teds_d_class_sizes_2015_2022.csv for all 18 classes.
 
 ## Missing data
 TEDS missing sentinel (-9) mapped to NaN in all features; HistGBM handles NaN natively.

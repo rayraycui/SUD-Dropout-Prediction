@@ -4,7 +4,8 @@ Download the TEDS-D public-use files (2015-2020, 2022) from SAMHSA and extract
 the CSVs into data/raw/. 2021 is intentionally skipped (its public-use file ships
 text labels rather than the numeric codes used in every other year).
 
-Source: SAMHSA Data Files (https://www.samhsa.gov/data/data-we-collect/teds/datafiles)
+Source: SAMHSA TEDS data files
+(https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles)
 The TEDS-D discharge public-use files are distributed as ZIP bundles. SAMHSA
 occasionally changes the exact download URLs; if a link 404s, browse the TEDS-D
 page above and update the URL for that year.
@@ -13,6 +14,10 @@ After extraction, data/raw/ should contain (filenames vary slightly by year):
     tedsd_2015_puf.csv, tedsd_2016_puf.csv, tedsd_puf_2017.csv,
     tedsd_puf_2018.csv, tedsd_puf_2019.csv, tedsd_puf_2020.csv,
     tedsd_puf_2022.csv
+
+All seven are COMMA-separated despite SAMHSA naming the 2015-2019 bundles
+"...-tsv...zip". Verify a download against data/raw/MANIFEST.csv, which pins the
+bundle and extracted-file sha256, byte size and row count for each year.
 """
 import os, sys, zipfile, urllib.request, glob
 
@@ -22,13 +27,13 @@ os.makedirs(RAW, exist_ok=True)
 # SAMHSA TEDS-D discharge public-use ZIP bundles (CSV format).
 # NOTE: verify/refresh these URLs at the TEDS-D data page if any fail.
 URLS = {
-    2015: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2015/TEDS-D-2015-datasets/TEDS-D-2015-DS0001/TEDS-D-2015-DS0001-bundles-with-study-info/TEDS-D-2015-DS0001-bndl-data-csv_v1.zip",
-    2016: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2016/TEDS-D-2016-datasets/TEDS-D-2016-DS0001/TEDS-D-2016-DS0001-bundles-with-study-info/TEDS-D-2016-DS0001-bndl-data-csv_v1.zip",
-    2017: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2017/TEDS-D-2017-datasets/TEDS-D-2017-DS0001/TEDS-D-2017-DS0001-bundles-with-study-info/TEDS-D-2017-DS0001-bndl-data-csv_v1.zip",
-    2018: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2018/TEDS-D-2018-datasets/TEDS-D-2018-DS0001/TEDS-D-2018-DS0001-bundles-with-study-info/TEDS-D-2018-DS0001-bndl-data-csv_v1.zip",
-    2019: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2019/TEDS-D-2019-datasets/TEDS-D-2019-DS0001/TEDS-D-2019-DS0001-bundles-with-study-info/TEDS-D-2019-DS0001-bndl-data-tsv_V1.zip",
-    2020: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2020/TEDS-D-2020-datasets/TEDS-D-2020-DS0001/TEDS-D-2020-DS0001-bundles-with-study-info/TEDS-D-2020-DS0001-bndl-data-csv_v1.zip",
-    2022: "https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/TEDS-D-2022/TEDS-D-2022-datasets/TEDS-D-2022-DS0001/TEDS-D-2022-DS0001-bundles-with-study-info/TEDS-D-2022-DS0001-bndl-data-csv_v1.zip",
+    2015: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2015-DS0001-bndl-data-tsv.zip",
+    2016: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2016-DS0001-bndl-data-tsv.zip",
+    2017: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2017-DS0001-bndl-data-tsv.zip",
+    2018: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2018-DS0001-bndl-data-tsv.zip",
+    2019: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2019-DS0001-bndl-data-tsv_V1.zip",
+    2020: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2020-DS0001-bndl-data-csv_v1.zip",
+    2022: "https://www.samhsa.gov/data/system/files/media-puf-file/TEDS-D-2022-DS0001-bndl-data-csv_v1.zip",
 }
 
 def fetch(year, url):

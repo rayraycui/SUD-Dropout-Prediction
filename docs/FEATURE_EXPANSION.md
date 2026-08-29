@@ -16,8 +16,7 @@ LIVARAG, ARRESTS, FREQ_ATND_SELF_HELP, MARSTAT: taking the panel from 15 to 27.
 **Interpretation.** The expansion produces a *consistent but small* improvement:
 every substance improves, so the added fields carry real (non-noise) signal, but
 the magnitude (~0.005-0.006 AUROC) is a fraction of a percentage point and does
-not change the model's character or any downstream conclusion. It is smaller
-than the pooled-vs-substance-specific gap (~0.008) and
+not change the model's character or any downstream conclusion. It is smaller than the pooled-versus-substance-specific gap (~0.008) and
 comparable to the bootstrap CI half-width.
 
 **Why 15 features is kept as primary:**

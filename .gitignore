@@ -1,12 +1,17 @@
-# raw data (large, public — download via src/00)
-data/raw/
+# raw data (large, public: download via src/00). The manifest and README are
+# tracked so a rebuild can be verified against the exact source files used.
+data/raw/*
+!data/raw/MANIFEST.csv
+!data/raw/README.md
 *.zip
-# large model checkpoint (download separately)
-data/tabpfn_v3_default.ckpt
 # python
 __pycache__/
 *.pyc
 .venv/
 .ipynb_checkpoints/
+# LaTeX side-products, if you build a manuscript inside this tree
+*.aux
+*.log
+*.out
 # OS
 .DS_Store

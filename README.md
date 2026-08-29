@@ -1,133 +1,192 @@
-# Zero-Shot Coverage of Unseen Substance Classes for SUD Treatment-Dropout Prediction on 6.7 Million Treatment Episodes
+# One Pooled Model or Seventeen Substance-Specific Models?
 
-Reproduction code, data-processing pipeline, and figures for the manuscript
-*"Zero-Shot Coverage of Unseen Substance Classes for SUD Treatment-Dropout Prediction on 6.7 Million Treatment Episodes
-on 6.7 Million National Treatment Episodes."*
+Reproduction code and data for the manuscript
+*Predicting SUD treatment dropout on 6.68 million national treatment episodes.*
 
-A single pooled gradient-boosted-tree model, trained only on the six highest-volume
-substances in the U.S. Treatment Episode Data Set (TEDS-D), predicts treatment dropout
-for twelve **held-out substance classes it never saw** at mean AUROC 0.777. The repo
-reproduces every result and figure in the paper from public data on CPU-only hardware.
+The question is not how accurate dropout prediction can be, but **how many models a
+treatment system should run**. A national reporting system records 17 primary substances
+of very uneven size. Fitting one model per substance means 17 models to tune, validate,
+monitor and re-fit, and the rarest substances still get little or nothing. This repository
+contains everything needed to reproduce that comparison.
 
-## Key findings
-1. **Coverage (primary):** one pooled model covers 12 unseen small substance classes
-   (mean AUROC 0.777, range 0.745–0.806), no per-substance training required.
-2. **Pooling costs no accuracy:** pooling does **not** raise accuracy (Δ = −0.008 against
-   substance-specific training), so the value is coverage, not a leaderboard gain.
-3. **Deployable on the unseen classes:** calibration transfers (mean decile gap 0.015, max
-   0.046), net benefit stays positive to threshold 0.80, and discrimination is stable across
-   22 strata (0.677–0.798), with one exception, a +0.140 calibration gap in the 65+ band
-   that traces to a single state × substance reporting cell.
-4. **Foundation-model benchmark:** TabPFN-3 beats GBT in all **18** matched-training-size
-   comparisons (mean +0.018 AUROC), but at each model's maximum training size the two are
-   indistinguishable (8 of 18, mean −0.0001), a sample-efficiency effect, not a higher
-   accuracy ceiling.
+**Scope note.** This repository is scoped to the current manuscript. Earlier analyses from
+superseded versions of this study (zero-shot coverage, calibration, decision curves,
+fairness auditing, COVID-era transportability, TabPFN-3 benchmarking) are **not** included,
+because no number or figure in the manuscript depends on them.
 
-## Training assembly
+## Getting the files
 
-Every cross-sectional result comes from **one** fit, the **joint-stratified holdout (JSH)**
-in `src/jsh_fit.py`: the 6,501,243 big-6 episodes are split 70/30 stratified jointly on
-(primary substance × outcome) → 4,550,870 train / 1,950,373 holdout; the train side is
-subsampled to 1,000,000 on the same joint key; one `HistGradientBoostingClassifier` is fitted
-there and scored **without refitting** on both the big-6 holdout and all 215,983 unseen-class
-episodes. The two temporal arms are year-restricted refits of the identical specification
-(`src/jsh_year_restricted.py`). Four arms sit outside JSH by design and are labelled as such.
-`docs/PROVENANCE.md` maps every number in the paper to its fit and data file.
+The analysis table (`data/teds_d_analysis_2015_2022.parquet`, ~39 MB) is 93% of the
+archive, so the repository is distributed two ways:
 
-## Repository layout
-```
-.
-├── README.md                 # this file
-├── LICENSE                   # MIT (code)
-├── requirements.txt          # core Python dependencies
-├── requirements-tabpfn.txt   # extra deps for the optional TabPFN benchmark
-├── Makefile                  # `make all` runs the full pipeline
-├── run_all.sh                # same pipeline as a plain shell script
-├── src/                      # all analysis + figure code (numbered by run order)
-│   ├── jsh_fit.py                     # CANONICAL training assembly (joint-stratified holdout); imported, not run
-│   ├── jsh_year_restricted.py         # year-restricted JSH variant used by the two temporal arms
-│   ├── 00_download_teds.py            # fetch TEDS-D public-use files -> data/raw/
-│   ├── 01_build_analysis_table.py     # harmonize 7 years -> data/teds_d_analysis_2015_2022.parquet
-│   ├── 02_baselines_single_pooled.py  # -> data/p1_phase1_single_pooled.csv
-│   ├── 02b_plot_regimes.py            # -> figures/p1_phase1_regimes.png
-│   ├── 03_calibration_dca.py          # -> figures/p1_calibration_dca.png
-│   ├── 04_coverage_unseen.py          # -> figures/p1_coverage_ci.png (+ data/p1_coverage_ci.csv)
-│   ├── 05_coverage_temporal.py        # -> figures/p1_coverage_temporal.png
-│   ├── 06_covid_temporal.py           # -> figures/p1_covid_temporal.png
-│   ├── 07a_fairness_score.py          # -> data/fairness_preds.parquet
-│   ├── 07_fairness_audit.py           # -> figures/p1_fairness.png
-│   ├── 07b_unseen_deployability.py    # -> unseen-class calibration/DCA/fairness/COVID CSVs
-│   ├── 07c_age65_anomaly.py           # -> data/p1_age65_anomaly_diagnosis.csv (65+ gap cause)
-│   ├── 08a_tabpfn_vs_gbt_compute.py   # optional; -> data/p1_tabpfn_vs_gbt.csv
-│   ├── 08_tabpfn_vs_gbt_plot.py       # -> figures/p1_tabpfn_vs_gbt.png
-│   ├── 08b_prep_uncapped.py           # GPU: full-data GBT + per-comparison splits
-│   ├── 08c_gpu_worker.py              # GPU: resumable TabPFN-3 comparisons (CUDA)
-│   ├── 08d_gpu_scaling_probe.py       # GPU: train-size/VRAM envelope -> data/gpu_probe.csv
-│   ├── 02c_pooled_cohorts.py          # sensitivity: balanced vs proportional pooling
-│   ├── 10_gbt_implementation_check.py # XGBoost vs HistGBT agreement -> data/p1_gbt_implementation_check.csv
-│   ├── 09_paper_figures.py            # -> paper/fig1..fig6 at IEEE print width
-│   └── 09b_paper_figures_unseen.py    # -> paper/fig3b, fig4b, fig5b (unseen-class deployability)
-├── data/                     # analysis table + per-figure result CSVs (see data/README.md)
-│   └── raw/                  # TEDS-D public-use CSVs land here (not committed)
-├── figures/                  # publication figures (PNG, 300 dpi)
-├── paper/                    # LaTeX source (see Overleaf package)
-└── docs/                     # data dictionary, results write-up, figure->code map
-```
+- **`teds_dropout_repo.zip`** (~33 MB) contains everything, including the analysis table.
+- **`teds_dropout_repo_code_only.zip`** (~2 MB) contains everything except the analysis
+  table. Use this if the larger archive fails to download or unzip, then either drop
+  `teds_d_analysis_2015_2022.parquet` into `data/` or rebuild it with
+  `python src/00_download_teds.py && python src/01_build_analysis_table.py`.
 
-## Quick start
+Steps 11 and 16 need the analysis table; step 12 (both figures), the sensitivity steps and
+the consistency check run from the committed CSVs alone and will tell you clearly if the
+table is missing.
+
+## Headline results
+
+| | Boosting | Logistic |
+|---|---|---|
+| Substance-specific (17 models) | **0.7864** | 0.7550 |
+| Pooled (1 model) | 0.7802 | 0.7449 |
+
+Episode-weighted AUROC over 2,003,904 held-out test episodes.
+
+1. **One model instead of 17 costs 0.006 AUROC.** Pooled boosting reaches
+   0.780 against 0.786 for the 17 substance-specific models.
+2. **Pooling is not more accurate.** It loses on all six of the highest-volume substances (0.008 on average) and on the three highest-volume of the remaining eleven.
+   Its advantages are coverage and consistency.
+3. **Pooled accuracy is far more uniform.** It spans 0.740-0.819
+   (sd 0.019) against 0.722-0.854 (sd 0.034) for
+   substance-specific models, so the substance served worst is served better.
+4. **The gain concentrates where data are thin.** The four substances with fewer than
+   5,000 training episodes gain 0.029 AUROC on average. The lowest-volume, other tranquilizers (435 training / 187 test episodes), goes from
+   0.724 alone to
+   0.819 pooled. Barbiturates is
+   the exception, losing 0.065.
+   Across substances, the pooling gain correlates with training size at
+   r = -0.532 (log10 episodes).
+5. **The learner matters more than the strategy.** Boosting beats logistic regression in all
+   17 substance-specific and all 17 pooled comparisons, mean gaps
+   0.023 and 0.035, several times the 0.006 cost of consolidation.
+
+## Data
+
+TEDS-D public-use files, discharge years 2015-2020 and 2022 (**2021 excluded**: its
+public-use CSV ships text labels rather than the numeric codes used in every other year).
+
+- **Cohort:** 6,679,648 episodes across 17 primary substances, dropout rate 0.397.
+- **Excluded:** TEDS-D SUB1 code 19, *other drugs* (37,578 episodes), a heterogeneous
+  residual category rather than a specific substance class.
+- **Pooled training set:** the six highest-volume substances, 4,550,867 episodes,
+  uncapped (6,501,243 episodes total, 97.3% of the cohort).
+  The eleven lower-volume substances (178,405 episodes) contribute none.
+- **Target:** binary, dropout (`REASON == 2`, left against professional advice) versus
+  treatment completed (`REASON == 1`). Other discharge reasons are excluded.
+- **Features:** the 15 intake-time predictors in Table I. The primary substance itself is
+  never a feature, so one fitted model applies to any substance unmodified.
+
+SAMHSA distributes the raw files; this repository does **not** redistribute them.
+`src/00_download_teds.py` fetches them and `data/raw/MANIFEST.csv` pins the exact bytes
+(URL, size and SHA-256 per file) used here.
+
+## Reproduce
+
 ```bash
-# 1. environment
-python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# 2. get the data (public, ~2 GB of CSVs)
-python src/00_download_teds.py          # writes data/raw/*.csv
-
-# 3. run everything
-make all                                # or: bash run_all.sh
+python src/00_download_teds.py        # fetch TEDS-D into data/raw/ (not committed)
+python src/01_build_analysis_table.py # -> data/teds_d_analysis_2015_2022.parquet
+python src/11_single_vs_pooled_uncapped.py   # the main comparison (Table III inputs)
+python src/12_single_vs_pooled_figures.py    # -> figures/fig1, figures/fig2 (Figs. 2 and 3)
+python src/18_overview_figure.py             # -> figures/fig0_overview (Fig. 1)
+python src/16_build_tables.py                # -> tables/table2_body.tex, table3_body.tex
+python src/17_check_consistency.py           # assert every data file agrees with the paper
 ```
-The committed `data/teds_d_analysis_2015_2022.parquet` lets you skip steps 0–1 and
-reproduce all figures directly (steps 02–08 read it). To rebuild the table from scratch,
-run steps 00 then 01.
 
-## Data source and access
-TEDS-D public-use files are distributed by SAMHSA:
-<https://www.samhsa.gov/data/data-we-collect/teds/datafiles>. They are de-identified and
-public; no application is required. **2021 is intentionally excluded**: its public-use
-file ships text labels instead of the numeric codes used in every other year.
-`src/00_download_teds.py` documents the exact URLs; refresh them from the page above if
-SAMHSA moves a file.
+`make all` runs the same sequence. Steps 13-15 are the reported sensitivity analyses and
+are independent of each other.
 
-## Compute
-Everything runs on a single CPU machine (developed on 48 cores, no GPU). The full
-pipeline (excluding downloads) takes on the order of a few hours, dominated by the
-gradient-boosting fits and bootstrap CIs. The TabPFN benchmark (step 08a) is optional and
-slow on CPU (in-context inference cost scales with train×test); it is resumable.
+The committed parquet lets every downstream step run without re-downloading: start at
+step 11 if you only want the results, or at step 00 to rebuild from source.
 
-## Reproducibility notes
-- Random seed is fixed (`RNG=0`) throughout; training is capped at a stratified
-  1,000,000 rows where noted. The one exception is the within-unseen COVID arm in
-  `src/07b_unseen_deployability.py`, which uses seed 42 by design.
-- **Bootstrap CIs use 300 resamples** in every arm (`src/04`, `src/05`, `src/06`,
-  `src/07_fairness_audit.py`). Test-set caps differ per arm: 100,000 rows in `src/04`,
-  `src/05` and `src/07_fairness_audit.py`, 150,000 in `src/06`. Point AUROCs are unaffected
-  by the resample count; only CI bounds are.
-- `src/jsh_fit.py` and `src/jsh_year_restricted.py` are **imported modules, not pipeline
-  steps**, they define the canonical training assembly that the numbered scripts call, so
-  they do not appear as stages in `run_all.sh` or the `Makefile`. Running `python
-  src/jsh_fit.py` directly performs the fit and prints the cohort sizes as a self-check.
-- **Known gap:** `src/02b_plot_regimes.py` is not present in this repository. Both
-  `run_all.sh` and the `Makefile` reference it in a commented-out line, so the pipeline
-  runs end to end without it. The figure it produced (`figures/p1_phase1_regimes.png`)
-  is committed, and the manuscript does not use it.
-- Each figure's underlying numbers are saved as a CSV in `data/` (see
-  `docs/FIGURES.md` for the figure→code→data mapping).
-- Model: scikit-learn `HistGradientBoostingClassifier`; TabPFN-3 via the `tabpfn` package.
+### Runtime
 
-## Citation
-If you use this code or the derived analysis table, please cite the manuscript (see
-`paper/`) and the TEDS-D data source (SAMHSA). A `CITATION.cff` template is included.
+Step 11 fits 36 models with no subsampling (the pooled boosted fit uses
+4,550,867 episodes) and computes bootstrap intervals, so it is the expensive
+step: roughly 30-60 minutes on 48 cores. Steps 13-15 refit the same design under
+alternative configurations and take a similar time each. Steps 12, 16 and 18 are seconds.
+
+## What produces what
+
+| Manuscript element | Script | Data |
+|---|---|---|
+| Table I (predictors) | - | narrative, `docs/teds_d_data_dictionary.md` |
+| Table II (cohort) | `src/16_build_tables.py` | `data/teds_d_analysis_2015_2022.parquet` |
+| Table III (AUROC) | `src/16_build_tables.py` | `data/p1_plan_eval_17substance_gbt_vs_logistic.csv` |
+| Fig. 1 (study overview) | `src/18_overview_figure.py` | parquet + `data/p1_plan_eval_17substance_gbt_vs_logistic.csv` |
+| Fig. 2 (single vs pooled) | `src/12_single_vs_pooled_figures.py` | same CSV |
+| Fig. 3 (pooling difference) | `src/12_single_vs_pooled_figures.py` | same CSV |
+| Early-stopping sensitivity | `src/13_early_stopping_sensitivity.py` | `data/p1_early_stopping_*.csv` |
+| Nominal-code sensitivity | `src/14_nominal_code_sensitivity.py` | `data/p1_categorical_sensitivity.csv` |
+| Bootstrap verdicts under categorical splits | `src/15_categorical_bootstrap.py` | `data/p1_categorical_verdicts.csv` |
+| Feature-set sensitivity (15 vs 27) | - | `docs/FEATURE_EXPANSION.md` |
+| Cross-file consistency check | `src/17_check_consistency.py` | all of `data/`, `tables/`, `figures/fig0_overview.svg` |
+
+Figure numbering in the manuscript: Fig. 1 is the study-overview schematic
+(`figures/fig0_overview.pdf`), Fig. 2 is `figures/fig1_single_vs_pooled.png` and Fig. 3 is
+`figures/fig2_pooling_delta.png`. The filenames predate the overview figure, so they run
+one behind the figure numbers.
+
+`src/16_build_tables.py` regenerates the Table II and Table III bodies as LaTeX, plus
+`data/teds_d_class_sizes_2015_2022.csv`; both tables reproduce the published versions
+verbatim. `src/17_check_consistency.py` then asserts that every committed data file, the
+analysis table and the two generated table bodies all agree with the manuscript, and exits
+nonzero if any does not. Run it after any change to `data/`.
+
+## Models
+
+Identical settings for every substance and both training strategies, so any difference
+between strategies reflects the training data rather than tuning:
+
+- **Boosting:** `HistGradientBoostingClassifier(max_iter=200, learning_rate=0.1,
+  max_bins=255, random_state=42)`, scikit-learn 1.9.0.
+- **Logistic:** `LogisticRegression(penalty='l2', C=1.0, solver='saga', max_iter=200)`
+  behind `OneHotEncoder(handle_unknown='ignore', min_frequency=50)`.
+- **Splits:** 70/30 per substance, stratified on the outcome, seed 0. No subsampling on
+  either strategy. The 30% halves are never used for fitting, so the comparison is paired
+  substance by substance.
+- **Intervals:** 2,000 paired bootstrap resamples on the shared test set, computed for the eleven lower-volume substances (the six highest-volume have test sets of 112,791 to 747,356 episodes, where the interval is narrow enough not to affect any
+  verdict). A difference counts as conclusive only when its interval excludes zero.
+
+## Reported sensitivity analyses
+
+- **Early stopping.** scikit-learn enables internal early stopping only above 10,000
+  training episodes, a threshold inside the size range studied here. All 18
+  boosted models were refitted with it forced off and forced on. No substance changed the
+  sign of its pooled-versus-specific difference, no difference moved by more than 0.005
+  with stopping off, and the episode-weighted cost stayed at 0.006.
+- **Nominal-code ordering.** Histogram binning splits on integer code order, so nominal
+  fields such as state and race are not order-invariant. Treating all predictors as plain
+  integer codes rather than declared categoricals reduces episode-weighted AUROC by 0.004
+  for substance-specific models and 0.006 for the pooled model, without changing the
+  pattern of results.
+- **Bootstrap verdicts under categorical splits.** Recomputed for the eleven lower-volume substances; three move from conclusive to inconclusive and none reverses direction.
+- **Feature-set size.** Expanding from 15 to 27 pre-admission features improved pooled
+  AUROC by +0.005 in a single-year check, within the interval width, so the 15-feature
+  panel was retained.
+
+## Layout
+
+```
+src/       numbered pipeline, run in order
+data/      committed analysis table and result CSVs; raw/ holds the manifest only
+figures/   the three manuscript figures, regenerated by src/12 and src/18
+tables/    Table II and Table III bodies as LaTeX, regenerated by src/16
+assets/    the overview figure's SVG layout template, read by src/18
+docs/      data dictionary, TEDS-D codebook, feature-set sensitivity note
+```
+
+The manuscript sources (`paper.tex`, `paper.pdf`, `IEEEtran.cls`) are not in this
+repository; they ship in the Overleaf package alongside copies of the three figures.
+This repository holds everything needed to regenerate those figures, the table bodies
+and every number in them from the data.
+
+## Limitations
+
+The unit is a treatment episode, not a person, and the outcome is an administrative
+discharge code rather than a clinical assessment of recovery. Bootstrap intervals for the lowest-volume substances are wide (half-widths up to
+0.059 AUROC), so per-substance verdicts there are
+indicative rather than settled. The comparison is retrospective and within one national
+data source.
 
 ## License
+
 Code is released under the MIT License (`LICENSE`). TEDS-D data is governed by SAMHSA's
-public-use data terms and is **not** redistributed in this repository.
+public-use data terms and is not redistributed here.

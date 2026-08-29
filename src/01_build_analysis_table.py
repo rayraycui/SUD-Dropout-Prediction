@@ -3,15 +3,17 @@ import numpy as np
 import os
 
 # These are the files src/00_download_teds.py extracts (it writes to data/raw/).
-# 2019 is distributed as a TAB-separated file: SAMHSA ships that year as
-# "...DS0001-bndl-data-tsv_V1.zip" while every other year is "-csv_v1.zip",
-# so read_year() below picks the separator from the extension.
+# NOTE ON THE BUNDLE NAMES: SAMHSA labels the 2015-2019 bundles "...-tsv...zip",
+# but every extracted file is COMMA-separated (verified: each header row contains
+# 75-77 commas and zero tabs). Do not infer the delimiter from the bundle name.
+# read_year() still picks the separator from the extension so a genuine .tsv would
+# work, but all seven current files are .csv.
 paths_all = {
     2015: 'data/raw/tedsd_2015_puf.csv',
     2016: 'data/raw/tedsd_2016_puf.csv',
     2017: 'data/raw/tedsd_puf_2017.csv',
     2018: 'data/raw/tedsd_puf_2018.csv',
-    2019: 'data/raw/tedsd_puf_2019.tsv',
+    2019: 'data/raw/tedsd_puf_2019.csv',
     2020: 'data/raw/tedsd_puf_2020.csv',
     2022: 'data/raw/tedsd_puf_2022.csv',
 }
@@ -21,10 +23,14 @@ need = ["REASON","SUB1","SUB2","SUB3","ROUTE1","FREQ1","FRSTUSE1","SERVICES","DS
 feat15 = need[2:]
 
 sub1_all = {
+    # SUB1 codes verified against the official SAMHSA TEDS-D codebook
+    # (TEDS-D-2022-DS0001-info-codebook_v1.pdf, p. 45). Code 1 is "None" and is
+    # excluded by the outcome/substance restrictions below. Code 19 ("Other drugs")
+    # is a heterogeneous catch-all rather than a substance class and is dropped.
     2:"Alcohol", 3:"Cocaine", 4:"Cannabis", 5:"Heroin", 6:"Non_rx_methadone", 7:"Other_opioids",
     8:"PCP", 9:"Other_hallucinogens", 10:"Methamphetamine", 11:"Other_amphetamines",
-    12:"Other_stimulants", 13:"Benzodiazepines", 14:"Other_sedatives", 15:"Other_tranquilizers",
-    16:"Barbiturates", 17:"Other_sedatives_hypnotics", 18:"Inhalants", 19:"OTC", 20:"Other_drugs"
+    12:"Other_stimulants", 13:"Benzodiazepines", 14:"Other_tranquilizers", 15:"Barbiturates",
+    16:"Other_sedatives_hypnotics", 17:"Inhalants", 18:"OTC",
 }
 big6 = {"Alcohol","Cocaine","Cannabis","Heroin","Other_opioids","Methamphetamine"}
 
