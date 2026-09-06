@@ -7,7 +7,7 @@ inside the range of substance training sizes studied here (435 to 1,743,828), so
 fitting procedure itself changes across the size range whose effect we report. This script refits all 18 boosted models three ways -- library default, forced off, and
 forced on -- so the reported pattern can be checked against a uniform procedure.
 
-Writes: es_sensitivity.csv (54 rows = 3 configurations x 17 substances)
+Writes: es_sensitivity.csv (51 rows = 3 configurations x 17 substances)
 Runtime: about 13 minutes on 48 CPU cores.
 """
 
