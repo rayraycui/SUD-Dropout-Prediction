@@ -30,14 +30,14 @@
 
 <rect x="50" y="358" width="280" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
 <text x="190" y="384" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="bold" fill="#444441">Small overall cost of pooling</text>
-<text x="190" y="406" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5F5E5A">AUROC 0.780 vs 0.786, weighted</text>
+<text x="190" y="406" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5F5E5A">AUROC 0.786 vs 0.790, weighted</text>
 
 <rect x="350" y="358" width="280" height="72" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.75"/>
 <text x="490" y="377" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="bold" fill="#085041">Lower-volume substances gain</text>
-<text x="490" y="397" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">+0.029 avg under 5k episodes</text>
-<text x="490" y="415" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">+0.095 lowest-volume substance</text>
+<text x="490" y="397" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">+0.034 avg under 5k episodes</text>
+<text x="490" y="415" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">+0.102 lowest-volume substance</text>
 
 <rect x="170" y="446" width="340" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.75"/>
 <text x="340" y="466" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="bold" fill="#085041">More uniform performance</text>
-<text x="340" y="486" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">SD 0.019 vs 0.034 across 17 substances</text>
+<text x="340" y="486" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">SD 0.017 vs 0.032 across 17 substances</text>
 </svg>

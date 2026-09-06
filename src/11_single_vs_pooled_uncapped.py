@@ -33,6 +33,9 @@ BOOT_N = 2000
 FEAT15 = ["SUB2", "SUB3", "ROUTE1", "FREQ1", "FRSTUSE1", "SERVICES", "DSMCRIT",
           "NOPRIOR", "PSOURCE", "AGE", "GENDER", "RACE", "EDUC", "EMPLOY", "STFIPS"]
 
+NOMINAL = ["SUB2", "SUB3", "ROUTE1", "SERVICES", "DSMCRIT",
+           "PSOURCE", "GENDER", "RACE", "EMPLOY", "STFIPS"]
+
 df = pd.read_parquet("data/teds_d_analysis_2015_2022.parquet")
 sizes = df.groupby("subname").size().sort_values(ascending=False)
 substances = list(sizes.index)
@@ -41,8 +44,11 @@ small = [s for s in substances if s not in big6]
 
 
 def gbt():
-    return HistGradientBoostingClassifier(max_iter=200, learning_rate=0.1,
-                                          max_bins=255, random_state=SEED_MODEL)
+    return HistGradientBoostingClassifier(
+        max_iter=200, learning_rate=0.1,
+        max_bins=255, random_state=SEED_MODEL,
+        categorical_features=[FEAT15.index(c) for c in NOMINAL]
+    )
 
 
 def logit():
@@ -131,8 +137,10 @@ res["gbt_minus_lr_pooled"] = res.gbt_pooled - res.lr_pooled
    .to_csv("data/p1_plan_eval_17substance_logistic.csv", index=False))
 
 res[["substance", "group", "train_n", "test_n",
-     "gbt_single", "gbt_pooled", "gbt_delta", "gbt_verdict",
-     "lr_single", "lr_pooled", "lr_delta", "lr_verdict",
+     "gbt_single", "gbt_pooled", "gbt_delta",
+     "gbt_ci_lo", "gbt_ci_hi", "gbt_verdict",
+     "lr_single", "lr_pooled", "lr_delta",
+     "lr_ci_lo", "lr_ci_hi", "lr_verdict",
      "gbt_minus_lr_single", "gbt_minus_lr_pooled"]].to_csv(
     "data/p1_plan_eval_17substance_gbt_vs_logistic.csv", index=False)
 
