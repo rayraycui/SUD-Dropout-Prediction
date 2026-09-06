@@ -239,24 +239,6 @@ between strategies reflects the training data rather than tuning:
 
   early stopping changed the differences by approximately 0.005 AUROC or less.
 
-- **Nominal-code ordering.** As an additional robustness check, treating the nominal fields
-
-  as ordinary integer codes rather than declared categorical features reduced episode-
-
-  weighted AUROC by 0.004 for substance-specific models and 0.006 for the pooled model.
-
-  The overall size-dependent pattern persisted, although several lower-volume point
-
-  estimates and bootstrap verdicts changed.
-
-- **Categorical-bootstrap cross-check.** An independent recomputation for the eleven
-
-  lower-volume substances under the primary categorical specification reproduces the main
-
-  GBT deltas and confidence intervals: pooling is conclusive for 5 substances,
-
-  substance-specific training for 1, and 5 are inconclusive.
-
 
 ## Layout
 
@@ -277,17 +259,7 @@ This repository holds everything needed to regenerate those figures, the table b
 
 and every number in them from the data.
 
-## Limitations
 
-The unit is a treatment episode, not a person, and the outcome is an administrative
-
-discharge code rather than a clinical assessment of recovery. Bootstrap intervals for the
-
-lowest-volume substances are wide (half-widths up to approximately 0.061 AUROC), so
-
-per-substance verdicts there are indicative rather than settled. The comparison is
-
-retrospective and within one national data source.
 
 ## License
 
