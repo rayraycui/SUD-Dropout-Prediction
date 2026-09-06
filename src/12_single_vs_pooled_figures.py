@@ -46,7 +46,7 @@ ax.set_xlabel("AUROC"); ax.margins(y=0.02)
 ax.axhline(y[5] - 0.5, color="#9aa0a8", lw=0.8, ls=(0, (4, 3)), zorder=0)
 ax.text(0.868, y[5] - 0.32, "six highest-volume substances above", fontsize=8.2,
         color=META, va="bottom", ha="right")
-ax.set_title("One pooled model stays close to per-substance models, and wins on low volume",
+ax.set_title("Pooling improves average AUROC with larger gains on low volume",
              loc="left")
 ax.legend(loc="upper left", bbox_to_anchor=(0.005, 0.885), frameon=False,
           handletextpad=0.4, borderpad=0.2, labelspacing=0.25)
