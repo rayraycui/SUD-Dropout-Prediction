@@ -48,24 +48,24 @@ alone.
 
 | | Boosting | Logistic |
 |---|---:|---:|
-| Substance-specific (17 models) | **0.7903** | 0.7550 |
-| Pooled (1 model) | 0.7857 | 0.7449 |
+| Substance-specific (17 models) | 0.7759 | 0.7494 |
+| Pooled (1 model) | **0.7862** | 0.7439 |
 
-Episode-weighted AUROC over 2,003,904 held-out test episodes.
+Unweighted mean AUROC across the 17 held-out substance-specific test sets, giving each substance equal weight.
 
-1. **One model instead of 17 has a small overall cost.** Pooled boosting reaches
+1. **One model instead of 17 improves mean performance across substances.** Pooled boosting reaches
 
-   0.7857 against 0.7903 for the 17 substance-specific models, an exact
+   0.7862 against 0.7759 for the 17 substance-specific models, an exact
 
-   episode-weighted difference of 0.0046 AUROC.
+   unweighted mean improvement of 0.0104 AUROC.
 
-2. **Pooling is not more accurate overall.** It loses on all six of the highest-volume
+2. **Weighting by test-set size reverses the comparison.** Episode-weighted, pooled boosting reaches
 
-   substances (0.006 AUROC on average). Among the three highest-volume of the remaining
+   0.7857 versus 0.7903 for the substance-specific models, an exact difference of -0.0046 AUROC.
 
-   eleven, the pooled-versus-specific differences are near zero (-0.001, -0.003 and +0.005).
+   This occurs because the six highest-volume substances, which account for 97.3% of episodes,
 
-   Its advantages are coverage, consistency and gains for several smaller groups.
+   all favor substance-specific training; pooling reduces AUROC by 0.006 on average across those six.
 
 3. **Pooled performance is more uniform.** It spans 0.752-0.815
 
@@ -244,9 +244,7 @@ between strategies reflects the training data rather than tuning:
 
   sign of its pooled-versus-specific difference under either uniform setting; disabling
 
-  early stopping changed the differences by approximately 0.005 AUROC or less, and the
-
-  episode-weighted cost of pooling remained 0.005.
+  early stopping changed the differences by approximately 0.005 AUROC or less.
 
 - **Nominal-code ordering.** As an additional robustness check, treating the nominal fields
 
