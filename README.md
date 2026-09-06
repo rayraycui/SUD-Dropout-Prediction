@@ -257,11 +257,6 @@ between strategies reflects the training data rather than tuning:
 
   substance-specific training for 1, and 5 are inconclusive.
 
-- **Feature-set size.** Expanding from 15 to 27 pre-admission features improved pooled
-
-  AUROC by +0.005 in a single-year check, within the interval width, so the 15-feature
-
-  panel was retained.
 
 ## Layout
 
