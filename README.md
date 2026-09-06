@@ -14,13 +14,6 @@ monitor and re-fit, and the rarest substances still get little data of their own
 
 contains everything needed to reproduce that comparison.
 
-**Scope note.** This repository is scoped to the current manuscript. Earlier analyses from
-
-superseded versions of this study (zero-shot coverage, calibration, decision curves,
-
-fairness auditing, COVID-era transportability, TabPFN-3 benchmarking) are **not** included,
-
-because no number or figure in the manuscript depends on them.
 
 ## Getting the files
 
