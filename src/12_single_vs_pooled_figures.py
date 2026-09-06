@@ -46,8 +46,6 @@ ax.set_xlabel("AUROC"); ax.margins(y=0.02)
 ax.axhline(y[5] - 0.5, color="#9aa0a8", lw=0.8, ls=(0, (4, 3)), zorder=0)
 ax.text(0.868, y[5] - 0.32, "six highest-volume substances above", fontsize=8.2,
         color=META, va="bottom", ha="right")
-ax.set_title("Pooling improves average AUROC with larger gains on low volume",
-             loc="left")
 ax.legend(loc="upper left", bbox_to_anchor=(0.005, 0.885), frameon=False,
           handletextpad=0.4, borderpad=0.2, labelspacing=0.25)
 ax.set_xlim(0.700, 0.872)
@@ -67,7 +65,6 @@ ax.axvline(0, color=META, lw=1.0, zorder=1)
 ax.set_yticks(y)
 ax.set_yticklabels([f"{l} ({n:,})" for l, n in zip(S.lab, S.train_n)])
 ax.set_xlabel("Change in AUROC from pooling (pooled minus per-substance)")
-ax.set_title("Whether pooling helps depends on how much data the substance has", loc="left")
 ax.legend(loc="upper right", bbox_to_anchor=(1.0, 0.62), frameon=False,
           handletextpad=0.4, borderpad=0.2, labelspacing=0.25)
 ax.text(0.004, y[0] + 0.62, "pooling better \u2192", fontsize=8.2, color=META, ha="left")
