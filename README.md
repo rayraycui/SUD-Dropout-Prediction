@@ -1,19 +1,6 @@
-# One Pooled Model or Seventeen Substance-Specific Models?
+# One Pooled Model or Seventeen Substance-Specific Models? Predicting SUD treatment dropout on 6.7 million national treatment episodes.
 
 Reproduction code and data for the manuscript
-
-*Predicting SUD treatment dropout on 6.68 million national treatment episodes.*
-
-The question is not how accurate dropout prediction can be, but **how many models a
-
-treatment system should run**. A national reporting system records 17 primary substances
-
-of very uneven size. Fitting one model per substance means 17 models to tune, validate,
-
-monitor and re-fit, and the rarest substances still get little data of their own. This repository
-
-contains everything needed to reproduce that comparison.
-
 
 ## Getting the files
 
@@ -36,53 +23,6 @@ The model-fitting, sensitivity, cohort/table, overview and consistency steps req
 analysis table. Step 12 (Figs. 2 and 3) can be regenerated from the committed result CSVs
 
 alone.
-
-## Headline results
-
-| | Boosting | Logistic |
-|---|---:|---:|
-| Substance-specific (17 models) | 0.7759 | 0.7494 |
-| Pooled (1 model) | **0.7862** | 0.7439 |
-
-Unweighted mean AUROC across the 17 held-out substance-specific test sets, giving each substance equal weight.
-
-1. **One model instead of 17 improves mean performance across substances.** Pooled boosting reaches
-
-   0.7862 against 0.7759 for the 17 substance-specific models, an exact
-
-   unweighted mean improvement of 0.0104 AUROC.
-
-2. **Weighting by test-set size reverses the comparison.** Episode-weighted, pooled boosting reaches
-
-   0.7857 versus 0.7903 for the substance-specific models, an exact difference of -0.0046 AUROC.
-
-   This occurs because the six highest-volume substances, which account for 97.3% of episodes,
-
-   all favor substance-specific training; pooling reduces AUROC by 0.006 on average across those six.
-
-3. **Pooled performance is more uniform.** It spans 0.752-0.815
-
-   (SD 0.017) against 0.713-0.839 (SD 0.032) for
-
-   substance-specific models, so the substance served worst is served better.
-
-4. **The gain concentrates where data are thin.** The four substances with fewer than
-
-   5,000 training episodes gain 0.034 AUROC on average. The lowest-volume, other
-
-   tranquilizers (435 training / 187 test episodes), goes from 0.713 alone to 0.815 pooled.
-
-   Barbiturates is the exception, losing 0.037.
-
-   Across substances, the pooling gain correlates with training size at
-
-   r = -0.616 (log10 episodes).
-
-5. **The learner matters more than the strategy.** Boosting beats logistic regression in
-
-   33 of 34 substance-by-strategy comparisons, with mean AUROC gaps of
-
-   0.026 under substance-specific training and 0.042 under pooled training.
 
 ## Data
 
