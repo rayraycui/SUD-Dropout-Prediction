@@ -118,7 +118,7 @@ def main():
 
 
     # 6. the overview schematic (Fig. 1) agrees with the data it summarizes
-    OVSVG = "figures/fig0_overview.svg"
+    OVSVG = "figures/fig1_overview.svg"
     if os.path.exists(OVSVG):
         svg = open(OVSVG, encoding="utf-8").read()
         big = h[h.group == "BIG6"]
@@ -127,8 +127,8 @@ def main():
                 f"{df.y.mean() * 100:.1f}% dropout",
                 f"{int(h.train_n.min())} to {h.train_n.max() / 1e6:.2f}M training episodes",
                 f"substances, {big.train_n.sum() / 1e6:.2f}M episodes",
-                f"AUROC {np.average(h.gbt_pooled, weights=h.test_n):.3f} vs "
-                f"{np.average(h.gbt_single, weights=h.test_n):.3f}, weighted",
+                f"{h.gbt_pooled.mean():.3f} pooled vs "
+                f"{h.gbt_single.mean():.3f} specific",
                 f"{tiny.gbt_delta.mean():+.3f} avg under 5k episodes",
                 f"{tiny.gbt_delta.max():+.3f} lowest-volume substance",
                 f"SD {h.gbt_pooled.std(ddof=1):.3f} vs "
