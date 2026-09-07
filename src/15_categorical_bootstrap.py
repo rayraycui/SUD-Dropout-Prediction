@@ -1,11 +1,12 @@
 """
-Bootstrap verdicts for the eleven small substances under native categorical splits.
+Bootstrap cross-check for the eleven lower-volume substances under the
+primary native-categorical specification.
 
-Recomputes the paired pooled-minus-single bootstrap intervals with the ten nominal
-fields declared categorical, so the significance verdicts in the manuscript can be
-compared against the ordered-code fits actually reported.
+Recomputes the paired pooled-minus-single bootstrap intervals with the ten
+nominal fields declared categorical, verifying the significance verdicts
+reported in the manuscript.
 
-Writes: cat_bootstrap.csv
+Writes: data/p1_categorical_verdicts.csv
 Runtime: about 6 minutes on 48 CPU cores.
 """
 
