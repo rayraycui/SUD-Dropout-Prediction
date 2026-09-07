@@ -39,7 +39,7 @@ and is NOT used.
 
 ## Leakage exclusions (hard: never used as features)
 - REASON (the label), SUB1_D and all *_D discharge fields, LOS (length of stay),
-  CASEID/DISYR (identifiers), SUB1 (grouping var), and the 18 substance FLG flags
+  CASEID/DISYR (identifiers), SUB1 (grouping var), and the 17 substance FLG flags
   (ALCFLG…OTHERFLG, they re-encode SUB1/2/3 and would leak the coverage grouping).
 
 ## High-volume / lower-volume split (locked on the full 7-year pool)
