@@ -110,7 +110,6 @@ run. Steps 13-15 refit related designs and can each take several minutes. Steps 
 | Early-stopping sensitivity | `src/13_early_stopping_sensitivity.py` | `data/p1_early_stopping_*.csv` |
 | Nominal-code robustness check | `src/14_nominal_code_sensitivity.py` | `data/p1_categorical_sensitivity.csv` |
 | Categorical-bootstrap cross-check | `src/15_categorical_bootstrap.py` | `data/p1_categorical_verdicts.csv` |
-| Feature-set sensitivity (15 vs 27) | - | `docs/FEATURE_EXPANSION.md` |
 | Cross-file consistency check | `src/17_check_consistency.py` | all of `data/`, `tables/`, `figures/fig0_overview.svg` |
 
 Figure numbering in the manuscript: Fig. 1 is the study-overview schematic
