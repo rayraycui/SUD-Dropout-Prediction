@@ -9,10 +9,7 @@ outcome and substance filtering.
 **NOTE: 2021 EXCLUDED:** the 2021 public-use CSV ships every field as TEXT labels
 (e.g. REASON="Dropped out of treatment", SUB1="Marijuana/hashish") rather than the
 numeric codes used in all other years. Rather than hand-build a text→code crosswalk
-(silent-miscoding risk), 2021 is dropped. The retained years still span pre-COVID
-(2015–2019), COVID (2020), and post-COVID (2022), so the COVID-aware temporal design
-is intact (post-COVID test = 2022).
-
+(silent-miscoding risk), 2021 is dropped. 
 **Analytic sample:** episodes with REASON in {1,2} and a mappable primary substance.
 - Rows: 6,679,648 (17 substances; SUB1 code 19, other drugs, excluded)
 - Overall dropout rate: 0.397
@@ -24,7 +21,7 @@ is intact (post-COVID test = 2022).
 | y | LABEL | 1 = dropout (REASON==2, "left against professional advice"); 0 = completed (REASON==1) |
 | SUB1 | grouping | Primary substance numeric code (NOT a feature; defines the substance classes and the coverage split) |
 | subname | grouping | Primary substance name (mapped from SUB1) |
-| is_big6 | grouping | True for the 6 large trainable classes; False for the 12 small classes |
+| is_big6 | grouping | True for the 6 large trainable classes; False for the 11 small classes |
 | SUB2, SUB3 | feature | Secondary / tertiary substance |
 | ROUTE1 | feature | Route of administration, primary substance |
 | FREQ1 | feature | Frequency of use, primary substance (at admission) |
