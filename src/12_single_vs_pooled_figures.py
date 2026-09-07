@@ -33,7 +33,7 @@ C = C.sort_values("test_n", ascending=False).reset_index(drop=True)
 C["lab"] = [SHORT.get(s, s.replace("_", " ")) for s in C.substance]
 S = C[C.group == "small"].reset_index(drop=True)
 
-# ---- Figure 1: per-substance vs pooled, every substance ---------------------
+# ---- Figure 2: per-substance vs pooled, every substance ---------------------
 fig, ax = plt.subplots(figsize=(7.16, 2.86))
 y = np.arange(len(C))[::-1]
 for yy, r in zip(y, C.itertuples()):
@@ -50,10 +50,10 @@ ax.legend(loc="upper left", bbox_to_anchor=(0.005, 0.885), frameon=False,
           handletextpad=0.4, borderpad=0.2, labelspacing=0.25)
 ax.set_xlim(0.700, 0.872)
 fig.tight_layout()
-fig.savefig("figures/fig1_single_vs_pooled.png")
+fig.savefig("figures/fig2_single_vs_pooled.png")
 plt.close(fig)
 
-# ---- Figure 2: pooling effect with intervals, small classes -----------------
+# ---- Figure 3: pooling effect with intervals, small classes -----------------
 fig, ax = plt.subplots(figsize=(7.16, 2.68))
 y = np.arange(len(S))[::-1]; off = 0.19
 for yy, r in zip(y, S.itertuples()):
@@ -71,7 +71,7 @@ ax.text(0.004, y[0] + 0.62, "pooling better \u2192", fontsize=8.2, color=META, h
 ax.text(-0.004, y[0] + 0.62, "\u2190 per-substance better", fontsize=8.2, color=META, ha="right")
 ax.set_xlim(-0.115, 0.168); ax.margins(y=0.07)
 fig.tight_layout()
-fig.savefig("figures/fig2_pooling_delta.png")
+fig.savefig("figures/fig3_pooling_delta.png")
 plt.close(fig)
 
-print("wrote figures/fig1_single_vs_pooled.png, figures/fig2_pooling_delta.png")
+print("wrote figures/fig2_single_vs_pooled.png, figures/fig3_pooling_delta.png")

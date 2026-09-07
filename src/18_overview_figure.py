@@ -21,9 +21,9 @@ import pandas as pd
 
 PARQUET = "data/teds_d_analysis_2015_2022.parquet"
 H2H = "data/p1_plan_eval_17substance_gbt_vs_logistic.csv"
-TEMPLATE = "assets/fig0_overview_template.svg"
-OUT_SVG = "figures/fig0_overview.svg"
-OUT_PDF = "figures/fig0_overview.pdf"
+TEMPLATE = "assets/fig1_overview_template.svg"
+OUT_SVG = "figures/fig1_overview.svg"
+OUT_PDF = "figures/fig1_overview.pdf"
 
 
 def facts():
@@ -46,8 +46,8 @@ def facts():
         "train_min": int(h.train_n.min()),
         "train_max_m": h.train_n.max() / 1e6,
         "pool_m": big.train_n.sum() / 1e6,
-        "auroc_pooled": np.average(h.gbt_pooled, weights=h.test_n),
-        "auroc_single": np.average(h.gbt_single, weights=h.test_n),
+        "auroc_pooled": h.gbt_pooled.mean(),
+        "auroc_single": h.gbt_single.mean(),
         "tiny_mean": tiny.gbt_delta.mean(),
         "tiny_max": tiny.gbt_delta.max(),
         "sd_pooled": h.gbt_pooled.std(ddof=1),
