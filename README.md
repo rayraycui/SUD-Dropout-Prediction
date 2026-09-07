@@ -65,8 +65,8 @@ python src/00_download_teds.py         # fetch TEDS-D into data/raw/ (not commit
 python src/01_build_analysis_table.py  # -> data/teds_d_analysis_2015_2022.parquet
 
 python src/11_single_vs_pooled_uncapped.py    # the main comparison (Table III inputs)
-python src/12_single_vs_pooled_figures.py     # -> figures/fig1, figures/fig2 (Figs. 2 and 3)
-python src/18_overview_figure.py               # -> figures/fig0_overview (Fig. 1)
+python src/12_single_vs_pooled_figures.py     # -> figures/fig2, figures/fig3 (Figs. 2 and 3)
+python src/18_overview_figure.py               # -> figures/fig1_overview (Fig. 1)
 python src/16_build_tables.py                  # -> tables/table2_body.tex, table3_body.tex
 python src/17_check_consistency.py             # cross-file consistency checks
 
@@ -115,11 +115,9 @@ run. Steps 13-15 refit related designs and can each take several minutes. Steps 
 
 Figure numbering in the manuscript: Fig. 1 is the study-overview schematic
 
-(`figures/fig0_overview.pdf`), Fig. 2 is `figures/fig1_single_vs_pooled.png` and Fig. 3 is
+(`figures/fig1_overview.pdf`), Fig. 2 is `figures/fig2_single_vs_pooled.png` and Fig. 3 is
 
-`figures/fig2_pooling_delta.png`. The filenames predate the overview figure, so they run
-
-one behind the figure numbers. Step 18 always regenerates the SVG; refreshing the PDF also
+`figures/fig3_pooling_delta.png`. Step 18 always regenerates the SVG; refreshing the PDF also
 
 requires `rsvg-convert`, CairoSVG or Inkscape.
 
