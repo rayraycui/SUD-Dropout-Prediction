@@ -4,9 +4,9 @@
 The diagram's layout lives in assets/fig0_overview_template.svg; every number in it
 is a placeholder filled from the committed data here, so the figure cannot drift
 away from the results it summarizes. Re-running this script on unchanged data
-reproduces figures/fig0_overview.svg byte for byte.
+reproduces figures/fig1_overview.svg byte for byte.
 
-Writes figures/fig0_overview.svg, and figures/fig0_overview.pdf (the figure the
+Writes figures/fig1_overview.svg, and figures/fig1_overview.pdf (the figure the
 manuscript includes)
 when an SVG converter is available.
 
