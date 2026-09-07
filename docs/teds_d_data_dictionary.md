@@ -43,7 +43,7 @@ and is NOT used.
   (ALCFLG…OTHERFLG, they re-encode SUB1/2/3 and would leak the coverage grouping).
 
 ## High-volume / lower-volume split (locked on the full 7-year pool)
-The lowest-volume of the six high-volume substances (Cocaine, 375,967) is 4.9× the highest-volume of the eleven lower-volume substances (Benzodiazepines, 76,380). See teds_d_class_sizes_2015_2022.csv for all 18 classes.
+The lowest-volume of the six high-volume substances (Cocaine, 375,967) is 4.9× the highest-volume of the eleven lower-volume substances (Benzodiazepines, 76,380). See teds_d_class_sizes_2015_2022.csv for all 17 classes.
 
 ## Missing data
 TEDS missing sentinel (-9) mapped to NaN in all features; HistGBM handles NaN natively.
