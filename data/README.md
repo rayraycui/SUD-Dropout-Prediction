@@ -10,7 +10,6 @@
 | `p1_plan_eval_17substance.csv` | 17 | boosting results alone (same run) |
 | `p1_plan_eval_17substance_logistic.csv` | 17 | logistic results alone (same run) |
 | `p1_early_stopping_sensitivity.csv` | 51 | every substance refitted under `early_stopping` auto / off / on |
-| `p1_early_stopping_deltas.csv` | 17 | the same run reshaped to one row per substance with shifts against auto |
 | `p1_categorical_sensitivity.csv` | 85 | declared categoricals versus plain integer codes, plus three code permutations |
 | `p1_categorical_verdicts.csv` | 11 | bootstrap verdicts for the eleven lower-volume substances under categorical splits |
 
