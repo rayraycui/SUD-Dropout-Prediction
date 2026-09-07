@@ -1,18 +1,18 @@
 """
 Nominal-code sensitivity check for the boosted models.
 
-HistGradientBoostingClassifier bins integer features and splits on bin thresholds,
-so an integer-coded nominal field such as STFIPS (51 codes) or RACE (9 codes) is
-split as if its codes were ordered. Trees can approximate an unordered partition
-with enough splits, but the fit is NOT invariant to how the codes are numbered.
+The primary analysis declares the ten nominal predictors as categorical
+features. This sensitivity analysis examines what happens when those
+variables are instead treated as ordered integer codes and whether results
+then depend on the arbitrary numerical coding of their categories.
 
-Two checks:
-  1. perm1-3  relabel each nominal column by a random bijection of its own codes.
-              If binning ignored code order, AUROC would be unchanged. It is not.
-  2. cat      declare the ten nominal fields via categorical_features, which uses
-              true unordered splits.
+Configurations:
+  1. base     treat nominal fields as ordinary integer-coded features
+  2. perm1-3  randomly relabel the category codes while preserving category membership
+  3. cat      use native categorical splits, matching the primary analysis
 
-Writes: cat_sensitivity.csv (90 rows = 5 configurations x 17 substances)
+Writes: data/p1_categorical_sensitivity.csv
+        (85 rows = 5 configurations x 17 substances)
 Runtime: about 21 minutes on 48 CPU cores.
 """
 
