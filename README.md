@@ -75,9 +75,8 @@ python src/14_nominal_code_sensitivity.py     # additional nominal-code robustne
 python src/15_categorical_bootstrap.py        # categorical-bootstrap cross-check
 ```
 
-`PY=python3 ./run_all.sh` runs the full sequence; `make all` runs the same pipeline if using
-
-the included Makefile. Step 13 is the reported early-stopping sensitivity analysis; steps
+`PY=python3 ./run_all.sh` runs the full sequence;`make all` runs the main analysis, figures, tables, and consistency checks; run `make sensitivity` separately for steps 13–15.
+Step 13 is the reported early-stopping sensitivity analysis; steps
 
 14-15 are additional robustness checks and are independent of each other.
 
